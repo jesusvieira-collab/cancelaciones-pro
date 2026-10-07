@@ -12,7 +12,7 @@
 <!-- ══ FIREBASE SDK (tiempo real · 1 doc por jornada) ══ -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-  import { getFirestore, doc, setDoc, getDoc, deleteDoc, collection, getDocs, onSnapshot }
+  import { getFirestore, doc, setDoc, getDoc, deleteDoc, collection, getDocs, onSnapshot, runTransaction }
     from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
   // ───────────────────────────────────────────────────────────────
@@ -39,6 +39,17 @@
       window.fbSave = async (col, id, data) => {
         try { await setDoc(doc(db_fb, col, String(id)), { payload: JSON.stringify(data) }); return true; }
         catch(e){ console.warn('fbSave', e); return false; }
+      };
+      // Lectura-fusión-escritura atómica (evita que dos turnos se pisen guardando al mismo tiempo)
+      window.fbTxMerge = async (col, id, local, mergeFn) => {
+        try {
+          return await runTransaction(db_fb, async (tx) => {
+            const ref = doc(db_fb, col, String(id)); const snap = await tx.get(ref);
+            const remote = snap.exists() ? JSON.parse(snap.data().payload) : null;
+            const merged = remote ? mergeFn(local, remote) : local;
+            tx.set(ref, { payload: JSON.stringify(merged) }); return merged;
+          });
+        } catch(e){ console.warn('fbTxMerge', e); return null; }
       };
       window.fbLoad = async (col, id) => {
         try { const s = await getDoc(doc(db_fb, col, String(id)));
@@ -204,8 +215,13 @@ table.data td.l{text-align:left}
 <!-- ═════ CARGA ═════ -->
 <section class="view active" id="v-carga">
   <div class="card">
-    <h2>Cargar reportes de la jornada</h2>
-    <p class="hint">Sube los Excel tal cual salen de Oracle (o pégalos). La herramienta busca sola la fila de encabezados, cruza R121 ↔ R031 por ITEM_ID, saca el piso (1er carácter de la Zona) y consolida ítem + ola.</p>
+    <h2>Cargar / actualizar la jornada compartida</h2>
+    <p class="hint">La jornada es <b>una sola para todo el equipo</b> (turno día y noche). La primera carga la abre; cada carga posterior del R121 la <b>actualiza</b> sumando ítems nuevos y respetando todo lo ya justificado. Todo se sincroniza en vivo.</p>
+    <div class="toolbar">
+      <div class="f"><label class="fld">Fecha de la jornada</label><input type="date" id="fecha-jornada" onchange="checkFecha()"></div>
+      <div class="f" style="min-width:200px"><label class="fld">Tu nombre (queda registrado en cada cambio)</label><input type="text" id="mi-nombre" maxlength="40" placeholder="Ej. Jesús V." oninput="guardarNombre(this.value)"></div>
+    </div>
+    <div id="msg-fecha"></div>
     <div class="row">
       <div class="col">
         <div class="drop" id="drop121" onclick="document.getElementById('f121').click()">
@@ -227,7 +243,7 @@ table.data td.l{text-align:left}
       </div>
     </div>
     <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
-      <button class="btn" id="btn-run" onclick="generar()" disabled>► Generar análisis</button>
+      <button class="btn" id="btn-run" onclick="generar()" disabled>► Cargar / actualizar jornada</button>
       <button class="btn ghost" onclick="limpiarCarga()">Limpiar</button>
     </div>
     <div id="msg-carga"></div>
@@ -241,12 +257,10 @@ table.data td.l{text-align:left}
   </div>
 
   <div class="card" id="card-cierre" hidden>
-    <h2>Cerrar jornada</h2>
-    <p class="hint">Asigna Dpto. responsable y Justificación en <b>📋 Detalle</b> (puedes hacerlo antes o después de cerrar). Al cerrar, la jornada queda en el historial y se sincroniza.</p>
-    <div class="toolbar">
-      <div class="f"><label class="fld">Fecha de la jornada</label><input type="date" id="fecha-jornada" onchange="checkFecha()"></div>
-      <button class="btn teal" onclick="cerrarJornada()">💾 Cerrar / guardar jornada</button>
-    </div>
+    <h2>Estado de la jornada</h2>
+    <div id="estado-jornada"></div>
+    <p class="hint" style="margin-top:10px">Cierra la jornada <b>solo cuando ya tengas el total de cancelaciones del día</b> (cierre del despacho). Aunque quede cerrada, se puede seguir justificando y se puede reabrir.</p>
+    <div class="toolbar" id="acciones-cierre"></div>
     <div id="msg-cierre"></div>
   </div>
 </section>
@@ -401,13 +415,13 @@ table.data td.l{text-align:left}
 <script>
 /* ═══════════════ ESTADO ═══════════════ */
 var JORNADAS = {};            // { 'YYYY-MM-DD': {fecha,dateLabel,savedAt,items:[...]} }
-var BORRADOR = null;          // jornada generada aún no cerrada
+var DIRTY = {};              // jornadas con cambios locales aún no subidos
 var CONFIG = null;            // { dptos:[], justs:[] }
-var activa = null;            // '__draft' o fecha ISO
+var activa = null;            // fecha ISO de la jornada en vista
 var SRC = { r121:null, r031:null };   // filas crudas (array de arrays)
 var periodo = 'S';
 var charts = {};
-var LS = { jor:'cancpro2_jornadas', cfg:'cancpro2_config', draft:'cancpro2_draft' };
+var LS = { jor:'cancpro2_jornadas', cfg:'cancpro2_config', draft:'cancpro2_draft', nom:'cancpro2_nombre' };
 var MESES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
 var MESES_L = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 var FTD = { azul1:'#001E62', azul2:'#418FDE', gris:'#647188', rejilla:'#E5E9F0', rojo:'#C8102E',
@@ -519,9 +533,9 @@ function mapaSugerencias(excluirFecha){
 }
 function rellenarSugerencias(){
   var it=itemsAct(); if(!it.length) return;
-  var sug=mapaSugerencias(activa==='__draft'?null:activa), n=0;
+  var sug=mapaSugerencias(activa), n=0;
   it.forEach(function(i){ var s=sug[i.id]; if(!s) return; var c=false;
-    if(!i.dpto&&s.dpto){ i.dpto=s.dpto; c=true; } if(!i.just&&s.just){ i.just=s.just; c=true; } if(c){ i.sug=true; n++; } });
+    if(!i.dpto&&s.dpto){ i.dpto=s.dpto; c=true; } if(!i.just&&s.just){ i.just=s.just; c=true; } if(c){ i.sug=true; i.t=Date.now(); n++; } });
   guardarActiva(); renderDetalle();
   alert(n? n+' registro(s) vacíos se rellenaron con su último Dpto./Justificación (marcados ↺). Revísalos y corrige si cambió la causa.' : 'No hay sugerencias para los registros vacíos (ítems sin historial de asignación).');
 }
@@ -544,12 +558,26 @@ function generar(){
   // Prellenar con sugerencias del histórico
   var sug=mapaSugerencias(null), nSug=0;
   lista.forEach(function(i){ var s=sug[i.id]; if(s){ i.dpto=s.dpto||''; i.just=s.just||''; i.sug=true; nSug++; } });
+  var f=$('fecha-jornada').value||hoyISO(); $('fecha-jornada').value=f;
+  var prev=JORNADAS[f], nNuevos=lista.length, nAct=0, nConserva=0;
+  if(prev && estadoJ(prev)==='cerrada' && !confirm('La jornada '+fl(f)+' está CERRADA. ¿Reabrirla y actualizarla con este reporte?')) return;
+  if(prev){
+    var pm={}; (prev.items||[]).forEach(function(i){ pm[i.id+'|'+i.wave]=i; });
+    var vistos={};
+    lista=lista.map(function(n){ var k=n.id+'|'+n.wave, o=pm[k]; vistos[k]=1; if(!o) return n;
+      nAct++; var c=Object.assign({},o); c.qty=n.qty; c.desc=n.desc||o.desc; c.clase=n.clase||o.clase;
+      if(n.zona){ c.zona=n.zona; c.ubic=n.ubic; c.piso=n.piso; } if((o.qty||0)!==n.qty) c.t=Date.now(); return c; });
+    (prev.items||[]).forEach(function(o){ if(!vistos[o.id+'|'+o.wave]){ lista.push(o); nConserva++; } });
+    nNuevos=lista.length-nAct-nConserva;
+  }
   lista.sort(function(x,y){return y.qty-x.qty;});
-  BORRADOR={fecha:'__draft', dateLabel:'Borrador', savedAt:null, items:lista};
-  activa='__draft'; guardarBorradorLocal();
+  var j=prev? Object.assign({},prev) : {fecha:f, dateLabel:fl(f), creadoEn:new Date().toLocaleString('es-VE'), creadoPor:miNombre()};
+  j.items=lista; j.estado='abierta'; j.cargas=(j.cargas||[]).concat([{en:new Date().toLocaleString('es-VE'),por:miNombre(),registros:a.rows.length,unidades:sum(a.rows,function(r){return r.qty;})}]).slice(-20);
+  tocar(j); JORNADAS[f]=j; activa=f; DIRTY[f]=true;
+  persistJornada(f);
   var unidFin=sum(lista,function(i){return i.qty;});
   var nSinZ=Object.keys(sinZona).length, uSinZ=sum(lista.filter(function(i){return i.piso==='?';}),function(i){return i.qty;});
-  $('card-diag').hidden=false; $('card-cierre').hidden=false;
+  $('card-diag').hidden=false;
   $('diag').innerHTML=
     '<div>R121 · encabezado en fila <b>'+a.hdrRow+'</b><br>Columnas: <b>'+esc(a.cols.wave)+'</b>, <b>'+esc(a.cols.item)+'</b>, <b>'+esc(a.cols.qty)+'</b></div>'+
     '<div>R121 · registros leídos<br><b style="font-size:18px">'+nf(a.rows.length)+'</b></div>'+
@@ -561,35 +589,77 @@ function generar(){
     '<div>Prellenados desde histórico ↺<br><b style="font-size:18px">'+nf(nSug)+'</b> registros</div>';
   $('diag-warn').innerHTML = (unidFin!==unidR121? '<div class="msg err">Las unidades consolidadas no cuadran con el R121. Revisa el archivo.</div>':'') +
     (nSinZ? '<div class="msg warn">⚠ '+nSinZ+' ítem(s) del R121 no aparecen en el R031 → quedan con piso "?". Verifica que el R031 sea el inventario completo.</div>':'<div class="msg ok">✓ Todos los ítems cruzaron con su zona de picking.</div>');
-  $('fecha-jornada').value = $('fecha-jornada').value || hoyISO(); checkFecha();
-  msg('msg-carga','✓ Análisis generado: '+nf(lista.length)+' registros · '+nf(unidFin)+' unidades. Revisa Piso × Ola y asigna en Detalle.','ok');
+  checkFecha();
+  var uTot=sum(lista,function(i){return i.qty;});
+  msg('msg-carga', prev? ('✓ Jornada '+fl(f)+' ACTUALIZADA: '+nf(nNuevos)+' registros nuevos, '+nf(nAct)+' actualizados'+(nConserva?', '+nf(nConserva)+' de cargas anteriores conservados':'')+'. Total: '+nf(lista.length)+' registros · '+nf(uTot)+' u. Las justificaciones ya hechas se respetaron.')
+    : ('✓ Jornada '+fl(f)+' ABIERTA y compartida: '+nf(lista.length)+' registros · '+nf(uTot)+' unidades. Ya la ve todo el equipo.'),'ok');
   refrescar(); ir('pisoola');
 }
 function limpiarCarga(){ SRC={r121:null,r031:null}; ['n121','n031'].forEach(function(i){$(i).textContent='';});
   ['drop121','drop031'].forEach(function(i){$(i).classList.remove('ok');}); $('t121').value=''; $('t031').value='';
   $('btn-run').disabled=true; $('card-diag').hidden=true; msg('msg-carga',''); }
 function checkReady(){ $('btn-run').disabled=!(SRC.r121&&SRC.r031); }
-function checkFecha(){ var f=$('fecha-jornada').value; msg('msg-cierre', f&&JORNADAS[f]? '⚠ Ya existe un cierre para '+fl(f)+'. Se <b>sobrescribirá</b> con estos datos.':'', 'warn'); }
-
+function estadoJ(j){ return (j&&j.estado)||'cerrada'; }
+function miNombre(){ var n=''; try{ n=localStorage.getItem(LS.nom)||''; }catch(e){} return n||($('mi-nombre')&&$('mi-nombre').value)||'Sin nombre'; }
+function guardarNombre(v){ try{ localStorage.setItem(LS.nom,v.trim()); }catch(e){} }
+function tocar(j){ if(!j) return; j.mt=Date.now(); j.modPor=miNombre(); j.modEn=new Date().toLocaleString('es-VE'); }
+function checkFecha(){
+  var f=$('fecha-jornada').value, j=f&&JORNADAS[f];
+  msg('msg-fecha', !f?'': j? ('Esta jornada ya existe ('+(estadoJ(j)==='abierta'?'<b>ABIERTA</b>':'<b>CERRADA</b>')+', '+nf((j.items||[]).length)+' registros, últ. modificación '+esc(j.modEn||j.savedAt||'—')+(j.modPor?' por '+esc(j.modPor):'')+'). Al cargar el R121 se <b>actualiza</b> sin perder lo justificado.')
+    : 'Jornada nueva: la primera carga la abre para todo el equipo.', j?'info':'ok');
+}
+function renderEstado(){
+  var j=JORNADAS[activa]; $('card-cierre').hidden=!j; if(!j) return;
+  var it=j.items||[], u=sum(it,function(i){return i.qty;}), g=it.filter(gest).length, ab=estadoJ(j)==='abierta';
+  $('estado-jornada').innerHTML='<div class="kpis" style="margin:0">'+
+    kpi(fl(activa), ab?'Jornada ABIERTA':'Jornada CERRADA', ab?'good':'', ab?'En curso, todos editan':'Cerrada '+esc(j.cierreEn||j.savedAt||'')+(j.cierrePor?' por '+esc(j.cierrePor):''),true)+
+    kpi(nf(u),'Unidades canceladas','', nf(it.length)+' registros')+
+    kpi(pct(g,it.length)+'%','Gestionados', g===it.length?'good':'alert', (it.length-g)+' pendientes')+
+    kpi(esc(j.modEn||'—'),'Última modificación','', j.modPor?'por '+esc(j.modPor):'',true)+
+    kpi(nf((j.cargas||[]).length),'Cargas del R121','', (j.cargas&&j.cargas.length)? 'última: '+esc(j.cargas[j.cargas.length-1].en)+' ('+esc(j.cargas[j.cargas.length-1].por)+')':'',true)+'</div>';
+  $('acciones-cierre').innerHTML= ab? '<button class="btn teal" onclick="cerrarJornada()">🔒 Cerrar jornada (total del día)</button>'
+    : '<button class="btn sec" onclick="reabrirJornada(\''+activa+'\')">🔓 Reabrir jornada</button>';
+}
 async function cerrarJornada(){
-  if(!BORRADOR){ msg('msg-cierre','No hay borrador. Genera el análisis primero.','err'); return; }
-  var f=$('fecha-jornada').value; if(!f){ msg('msg-cierre','Selecciona la fecha de la jornada.','err'); return; }
-  if(JORNADAS[f] && !confirm('Ya existe la jornada '+fl(f)+'. ¿Sobrescribir?')) return;
-  var pend=BORRADOR.items.filter(function(i){return !gest(i);}).length;
-  var j={fecha:f, dateLabel:fl(f), savedAt:new Date().toLocaleString('es-VE'), items:BORRADOR.items.map(function(i){ var c=Object.assign({},i); delete c.sug; return c; })};
-  JORNADAS[f]=j; BORRADOR=null; activa=f; guardarBorradorLocal();
-  await persistJornada(f);
-  msg('msg-cierre','✓ Jornada '+fl(f)+' cerrada'+(window.FB_ON?' y sincronizada':' (local)')+'. '+(pend?pend+' registro(s) quedan pendientes de asignar; puedes completarlos luego desde Historial → Abrir.':''),'ok');
-  refrescar();
+  var j=JORNADAS[activa]; if(!j) return;
+  var it=j.items||[], pend=it.filter(function(i){return !gest(i);}).length, u=sum(it,function(i){return i.qty;});
+  if(!confirm('Cerrar la jornada '+fl(activa)+' con '+nf(u)+' unidades canceladas ('+nf(it.length)+' registros)?'+(pend?'\n\nQuedan '+pend+' registro(s) sin justificar; se podrán completar después.':'')+'\n\nHazlo solo con el total del día (cierre del despacho).')) return;
+  j.estado='cerrada'; j.cierreEn=new Date().toLocaleString('es-VE'); j.cierrePor=miNombre(); j.savedAt=j.cierreEn; j.totalCierre={registros:it.length,unidades:u};
+  tocar(j); DIRTY[activa]=true; await persistJornada(activa);
+  msg('msg-cierre','✓ Jornada '+fl(activa)+' cerrada con '+nf(u)+' unidades.'+(pend?' '+pend+' registro(s) siguen pendientes de justificar.':''),'ok'); refrescar();
+}
+async function reabrirJornada(f){
+  var j=JORNADAS[f]; if(!j||!confirm('¿Reabrir la jornada '+fl(f)+'?')) return;
+  j.estado='abierta'; tocar(j); DIRTY[f]=true; await persistJornada(f); activa=f; refrescar();
 }
 
 /* ═══════════════ PERSISTENCIA ═══════════════ */
 function persistLocal(){ try{ localStorage.setItem(LS.jor,JSON.stringify(JORNADAS)); }catch(e){} try{ localStorage.setItem(LS.cfg,JSON.stringify(CONFIG)); }catch(e){} }
-function guardarBorradorLocal(){ try{ if(BORRADOR) localStorage.setItem(LS.draft,JSON.stringify(BORRADOR)); else localStorage.removeItem(LS.draft); }catch(e){} }
-async function persistJornada(f){ persistLocal(); if(window.FB_ON&&window.fbSave){ var ok=await window.fbSave('canc_jornadas',f,JORNADAS[f]); window.fbSetStatus&&window.fbSetStatus(ok); } }
+function claveI(i){ return i.id+'|'+i.wave; }
+// Fusiona dos versiones de una jornada: por ítem gana el cambio más reciente (campo t); metadatos del más reciente (mt)
+function mergeJ(a,b){
+  if(!b) return a; if(!a) return b;
+  var m={}, ord=[];
+  (b.items||[]).forEach(function(i){ var k=claveI(i); if(!m[k]) ord.push(k); m[k]=i; });
+  (a.items||[]).forEach(function(i){ var k=claveI(i), o=m[k]; if(!o){ ord.push(k); m[k]=i; } else if((i.t||0)>=(o.t||0)) m[k]=i; });
+  var base=(a.mt||0)>=(b.mt||0)?a:b, r=Object.assign({},base); r.items=ord.map(function(k){return m[k];});
+  if((a.cargas||[]).length>(r.cargas||[]).length) r.cargas=a.cargas;
+  return r;
+}
+var EDITS={};
+async function persistJornada(f){
+  persistLocal();
+  if(!(window.FB_ON&&JORNADAS[f])) return;
+  var seq=EDITS[f]||0, ok=false;
+  if(window.fbTxMerge){ var m=await window.fbTxMerge('canc_jornadas',f,JORNADAS[f],mergeJ); if(m){ ok=true; JORNADAS[f]=mergeJ(JORNADAS[f],m); } }
+  else if(window.fbSave){ ok=await window.fbSave('canc_jornadas',f,JORNADAS[f]); }
+  if(ok && (EDITS[f]||0)===seq) DIRTY[f]=false;   // si hubo ediciones durante el guardado, sigue pendiente
+  else if(ok){ clearTimeout(_t); _t=setTimeout(function(){ persistJornada(f); },400); }
+  window.fbSetStatus&&window.fbSetStatus(ok); persistLocal();
+}
 async function persistConfig(){ persistLocal(); if(window.FB_ON&&window.fbSave) await window.fbSave('canc_config','main',CONFIG); }
 var _t=null;
-function guardarActiva(){ if(activa==='__draft'){ guardarBorradorLocal(); return; } clearTimeout(_t); _t=setTimeout(function(){ persistJornada(activa); },700); }
+function guardarActiva(){ if(!activa||!JORNADAS[activa]) return; tocar(JORNADAS[activa]); DIRTY[activa]=true; EDITS[activa]=(EDITS[activa]||0)+1; persistLocal(); clearTimeout(_t); var f=activa; _t=setTimeout(function(){ persistJornada(f); },700); }
 
 window.appFbInit = async function(){
   try{
@@ -603,7 +673,10 @@ window.appFbInit = async function(){
     for(var n=0;n<soloLocal.length;n++){ await window.fbSave('canc_jornadas',soloLocal[n],JORNADAS[soloLocal[n]]); all[soloLocal[n]]=JORNADAS[soloLocal[n]]; }
     JORNADAS=all;
     persistLocal(); boot();
-    window.fbListenCol('canc_jornadas',function(a){ JORNADAS=a||{}; persistLocal(); refrescar(); });
+    window.fbListenCol('canc_jornadas',function(a){ a=a||{};
+      Object.keys(a).forEach(function(f){ JORNADAS[f]= DIRTY[f]? mergeJ(JORNADAS[f],a[f]) : a[f]; });
+      Object.keys(JORNADAS).forEach(function(f){ if(!a[f]&&!DIRTY[f]) delete JORNADAS[f]; });
+      persistLocal(); refrescarSuave(); });
     window.fbListenDoc('canc_config','main',function(c){ if(c&&c.dptos){ CONFIG=c; persistLocal(); refrescar(); } });
   }catch(e){ console.warn(e); window.fbSetStatus&&window.fbSetStatus(false); }
 };
@@ -623,16 +696,33 @@ function render(v){
   else if(v==='gerencial') renderGerencial();
   else if(v==='historial') renderHistorial();
 }
+function jornadaPorDefecto(){
+  var fs=Object.keys(JORNADAS).sort(), ab=fs.filter(function(f){return estadoJ(JORNADAS[f])==='abierta';});
+  return ab.length? ab[ab.length-1] : (fs.length? fs[fs.length-1] : null);
+}
 function refrescar(){
-  if(activa!=='__draft' && (!activa||!JORNADAS[activa])){ var fs=Object.keys(JORNADAS).sort(); activa= BORRADOR?'__draft':(fs.length?fs[fs.length-1]:null); }
-  $('estado-datos').innerHTML = activa? ('Jornada en vista: <b>'+fl(activa)+'</b>'+(activa==='__draft'?' (sin cerrar)':'')) : 'Sin jornada activa';
-  render(vista());
+  if(!activa||!JORNADAS[activa]) activa=jornadaPorDefecto();
+  var j=activa&&JORNADAS[activa];
+  $('estado-datos').innerHTML = j? ('Jornada <b>'+fl(activa)+'</b> · '+(estadoJ(j)==='abierta'?'<span style="color:#7CF0E6;font-weight:800">ABIERTA</span>':'cerrada')+
+    '<br>Últ. modif.: '+esc(j.modEn||j.savedAt||'—')+(j.modPor?' · '+esc(j.modPor):'')) : 'Sin jornada activa';
+  if(!$('fecha-jornada').value && activa) $('fecha-jornada').value= estadoJ(j)==='abierta'? activa : hoyISO();
+  renderEstado(); try{ checkFecha(); }catch(e){} render(vista());
+}
+var _pend=false;
+function refrescarSuave(){
+  var a=document.activeElement;
+  if(a && a.closest && a.closest('#tbl-det') && (a.tagName==='INPUT'||a.tagName==='SELECT')){
+    if(!_pend){ _pend=true; a.addEventListener('blur',function h(){ a.removeEventListener('blur',h); _pend=false; setTimeout(refrescar,50); }); }
+    var j=activa&&JORNADAS[activa]; if(j) $('estado-datos').innerHTML='Jornada <b>'+fl(activa)+'</b> · cambios entrantes…<br>Últ. modif.: '+esc(j.modEn||'—')+(j.modPor?' · '+esc(j.modPor):'');
+    return;
+  }
+  refrescar();
 }
 function boot(){
   if(!CONFIG||!CONFIG.dptos) CONFIG=JSON.parse(JSON.stringify(CONFIG_DEFAULT));
   $('hoy').textContent=fl(hoyISO()); refrescar();
 }
-function jAct(){ return activa==='__draft'? BORRADOR : (activa? JORNADAS[activa]:null); }
+function jAct(){ return activa? JORNADAS[activa]:null; }
 function itemsAct(){ var j=jAct(); return j? (j.items||[]) : []; }
 
 /* ═══════════════ TABLAS DINÁMICAS ═══════════════ */
@@ -724,19 +814,19 @@ function agregarOpcion(tipo){
 function nuevaOpcionUI(tipo){ var v=agregarOpcion(tipo); if(v){ poblarFiltros(); renderDetalle(); alert('✓ "'+v+'" agregado a la lista y sincronizado con el equipo.'); } }
 var _tn=null;
 function setNota(ix,val){ var it=itemsAct(), base=it[ix]; if(!base) return;
-  it.forEach(function(i){ if(i.id===base.id) i.nota=val; }); guardarActiva(); }
+  var t=Date.now(); it.forEach(function(i){ if(i.id===base.id){ i.nota=val; i.t=t; } }); guardarActiva(); }
 function asignar(ix, campo, val){
   var it=itemsAct(), base=it[ix]; if(!base) return;
   if(val==='__add__'){ val=agregarOpcion(campo==='dpto'?'dptos':'justs'); if(!val){ renderDetalle(); return; } poblarFiltros(); }
-  it.forEach(function(i){ if(i.id===base.id){ i[campo]=val; i.sug=false; } });  // aplica a todas las olas del ítem
+  var t=Date.now(); it.forEach(function(i){ if(i.id===base.id){ i[campo]=val; i.sug=false; i.t=t; } });  // aplica a todas las olas del ítem
   guardarActiva(); renderDetalle();
 }
 function asignarMasivo(){
   var d=$('m-dpto').value, j=$('m-just').value; if(!d&&!j){ alert('Elige Dpto. y/o Justificación.'); return; }
   var f=filtrados(); if(!confirm('Asignar a '+f.length+' registros filtrados?')) return;
-  f.forEach(function(i){ if(d) i.dpto=d; if(j) i.just=j; i.sug=false; }); guardarActiva(); renderDetalle();
+  var t=Date.now(); f.forEach(function(i){ if(d) i.dpto=d; if(j) i.just=j; i.sug=false; i.t=t; }); guardarActiva(); renderDetalle();
 }
-function aceptarSugerencias(){ var f=filtrados().filter(function(i){return i.sug;}); f.forEach(function(i){i.sug=false;}); guardarActiva(); renderDetalle(); }
+function aceptarSugerencias(){ var t=Date.now(); var f=filtrados().filter(function(i){return i.sug;}); f.forEach(function(i){i.sug=false; i.t=t;}); guardarActiva(); renderDetalle(); }
 
 /* ═══════════════ ANÁLISIS JORNADA ═══════════════ */
 function agrupar(items, keyFn){ var m={}; items.forEach(function(i){ var k=keyFn(i); m[k]=(m[k]||0)+i.qty; });
@@ -813,8 +903,7 @@ function eventosSingulares(fechas){
 }
 var GS={};
 function fuenteGerencial(){
-  var src={}; Object.keys(JORNADAS).forEach(function(f){ src[f]=JORNADAS[f]; });
-  if(BORRADOR&&BORRADOR.items&&BORRADOR.items.length){ var f=($('fecha-jornada')&&$('fecha-jornada').value)||hoyISO(); src[f]={fecha:f,items:BORRADOR.items,enCurso:true}; }
+  var src={}; Object.keys(JORNADAS).forEach(function(f){ src[f]=Object.assign({},JORNADAS[f],{enCurso:estadoJ(JORNADAS[f])==='abierta'}); });
   return src;
 }
 function renderGerencial(){
@@ -908,11 +997,13 @@ function renderHistorial(){
   var meses=uniq(fs.map(function(f){return f.slice(0,7);})), sm=$('h-mes'), c=sm.value;
   sm.innerHTML='<option value="">Todos</option>'+meses.map(function(m){return '<option value="'+m+'">'+MESES_L[+m.slice(5)-1]+' '+m.slice(0,4)+'</option>';}).join(''); if(meses.indexOf(c)>=0) sm.value=c;
   var lista=fs.filter(function(f){return !sm.value||f.slice(0,7)===sm.value;});
-  $('h-sub').textContent=fs.length+' jornada(s) guardada(s)'+(BORRADOR?' · 1 borrador sin cerrar':'');
+  var nAb=fs.filter(function(f){return estadoJ(JORNADAS[f])==='abierta';}).length;
+  $('h-sub').textContent=fs.length+' jornada(s)'+(nAb?' · '+nAb+' abierta(s)':'');
   if(!fs.length){ $('h-list').innerHTML='<p class="hint">Aún no hay jornadas. Importa la migración o cierra una jornada.</p>'; return; }
   $('h-list').innerHTML=lista.map(function(f){ var it=JORNADAS[f].items||[], u=sum(it,function(i){return i.qty;}), g=it.filter(gest).length;
     return '<div class="hist-row'+(f===activa?' act':'')+'"><div class="f">'+fl(f)+'</div><div class="m"><b>'+nf(it.length)+'</b> registros · <b>'+nf(u)+'</b> unidades · '+
-      '<span class="pill '+(g===it.length?'g':'n')+'">'+g+'/'+it.length+' gestionados</span><br><span style="font-size:11px;color:#889">Guardado: '+esc(JORNADAS[f].savedAt||'—')+'</span></div>'+
+      '<span class="pill '+(estadoJ(JORNADAS[f])==='abierta'?'g':'n')+'">'+(estadoJ(JORNADAS[f])==='abierta'?'ABIERTA':'cerrada')+'</span> '+
+      '<span class="pill '+(g===it.length?'g':'n')+'">'+g+'/'+it.length+' gestionados</span><br><span style="font-size:11px;color:#889">Últ. modif.: '+esc(JORNADAS[f].modEn||JORNADAS[f].savedAt||'—')+(JORNADAS[f].modPor?' · '+esc(JORNADAS[f].modPor):'')+'</span></div>'+
       '<button class="btn sm sec" onclick="abrirJornada(\''+f+'\')">Abrir</button><button class="btn sm danger" onclick="eliminarJornada(\''+f+'\')">Eliminar</button></div>'; }).join('');
 }
 function abrirJornada(f){ activa=f; refrescar(); ir('pisoola'); }
@@ -1047,12 +1138,12 @@ function wire(key, dropId, fileId, txtId, labelId){
 window.addEventListener('DOMContentLoaded',function(){
   try{ var j=localStorage.getItem(LS.jor); if(j) JORNADAS=JSON.parse(j)||{}; }catch(e){}
   try{ var c=localStorage.getItem(LS.cfg); if(c) CONFIG=JSON.parse(c); }catch(e){}
-  try{ var b=localStorage.getItem(LS.draft); if(b){ BORRADOR=JSON.parse(b); activa='__draft'; } }catch(e){}
+  try{ localStorage.removeItem(LS.draft); }catch(e){}
+  try{ $('mi-nombre').value=localStorage.getItem(LS.nom)||''; }catch(e){}
   botonesPNG();
   wire('r121','drop121','f121','t121','n121'); wire('r031','drop031','f031','t031','n031');
   $('fi-json').addEventListener('change',function(){ if(this.files[0]) importarJSON(this.files[0]); this.value=''; });
   $('fi-xls').addEventListener('change',function(){ if(this.files[0]) importarExcelHistorial(this.files[0]); this.value=''; });
-  if(BORRADOR){ $('card-cierre').hidden=false; $('fecha-jornada').value=hoyISO(); }
   boot();
 });
 </script>
