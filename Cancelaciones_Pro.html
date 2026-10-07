@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Cancelaciones Pro · CENDIS</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNDAuMjU4IDE0MC4yNTgiIHdpZHRoPSIxNDAuMjU4IiBoZWlnaHQ9IjE0MC4yNTgiIHJvbGU9ImltZyIgYXJpYS1sYWJlbD0iRmFybWF0b2RvIj48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSg5LjU3Miw3LjUxNCkiPjxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKC0yNzQuOTE0LC0yMTIuNTMxKSI+PHBhdGggZmlsbD0iIzAwMUU2MiIgZD0iTSAyNzQuOTE0IDIxMi41MzEgTCAzOTYuMDI3IDIxMi41MzEgTCAzOTYuMDI3IDMzNy43NjIgTCAyNzQuOTE0IDMzNy43NjIgWiIvPjxwYXRoIGZpbGw9IiNGRkZGRkYiIGQ9Ik0gMzU1LjcyMyAzMzQuNDggQyAzNTcuMTk5IDMyOS4xMzMgMzU4LjAwOCAzMjMuNTIzIDM1OC4wMDggMzE3LjcxOSBDIDM1OC4wMDggMjgyLjg5OCAzMjkuODA1IDI1NC42NzYgMjk0Ljk2NSAyNTQuNjc2IEMgMjg5LjE0OCAyNTQuNjc2IDI4My41MDggMjU1LjQ5NiAyNzguMTQ1IDI1Ni45NzMgTCAyNzguMTQ1IDMzNC40OCBaIE0gMzM1LjU1NSAzMjAuNjkxIEMgMzMwLjA5NCAzMjcuMTA5IDMxOS45MjIgMzI4LjU1OSAzMTMuNDg4IDMyMy4xMDkgQyAzMDcuMTAyIDMxNy42NjQgMzA2LjMyOCAzMDguMDU1IDMxMS43NTQgMzAxLjYzNyBDIDMxOC4wMzUgMjk0LjI0MiAzNDIuNTg2IDI4My4yODEgMzQyLjg0NCAyODMuMzA5IEMgMzQzLjI5MyAyODMuMzU1IDM0MS40MDIgMzEzLjc4OSAzMzUuNTU1IDMyMC42OTEgTSAzMDkuNzE1IDI2MS4zNCBDIDMxOS40NTcgMjYzLjE2OCAzNDEuNzM0IDI3OS4zOTggMzQxLjg0NCAyNzkuNjYgQyAzNDIuMDQ3IDI4MC4wNTUgMzE0LjAwOCAyOTMuOTA2IDMwNC44ODMgMjkyLjIxNSBDIDI5Ni40MTQgMjkwLjYyMSAyODkuOTM0IDI4Mi4yOTcgMjkxLjUwNCAyNzMuODM2IEMgMjkzLjA4NiAyNjUuMzQ0IDMwMS4yNDYgMjU5Ljc3MyAzMDkuNzE1IDI2MS4zNCAiLz48cGF0aCBmaWxsPSIjRkZGRkZGIiBkPSJNIDM0OC40NjEgMjcxLjgwNSBDIDM0OC42MjkgMjcxLjU3OCAzNDkuODQgMjQzLjUwNCAzNDYuMDI3IDIzNC4wOSBDIDM0Mi43MzggMjI1LjkzIDMzMy40MzggMjIxLjk2MSAzMjUuMjcgMjI1LjI4MSBDIDMxNy4wOSAyMjguNTgyIDMxMy40ODggMjM4LjczNCAzMTYuNzkzIDI0Ni45MTQgQyAzMjAuMzQ4IDI1NS43MDcgMzQ4LjIyMyAyNzIuMjExIDM0OC40NjEgMjcxLjgwNSAiLz48cGF0aCBmaWxsPSIjRkZGRkZGIiBkPSJNIDM3Ni40NjkgMjI1LjI4MSBDIDM2OC4yOTcgMjIxLjk2MSAzNTkuMDA0IDIyNS45MyAzNTUuNzE5IDIzNC4wOSBDIDM1MS44ODcgMjQzLjUwNCAzNTMuMTA1IDI3MS41NzggMzUzLjI4NSAyNzEuODA1IEMgMzUzLjUyMyAyNzIuMjE1IDM4MS4zOTEgMjU1LjcwNyAzODQuOTQxIDI0Ni45MTQgQyAzODguMjUgMjM4LjczIDM4NC42NDggMjI4LjU4NiAzNzYuNDY5IDIyNS4yODEgIi8+PC9nPjwvZz48L3N2Zz4=">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<!-- ══ FIREBASE SDK (tiempo real · 1 doc por jornada) ══ -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+  import { getFirestore, doc, setDoc, getDoc, deleteDoc, collection, getDocs, onSnapshot }
+    from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+
+  // ───────────────────────────────────────────────────────────────
+  // PEGA AQUÍ LAS CREDENCIALES DE TU PROYECTO FIREBASE NUEVO.
+  // Mientras tengan "TU_..." la app funciona en modo LOCAL (este equipo).
+  // ───────────────────────────────────────────────────────────────
+  const firebaseConfig = {
+    apiKey: "AIzaSyCrFXzXL1hoDYRrmXwILK4sSanJ28acOxA",
+    authDomain: "cendis-noc26.firebaseapp.com",
+    projectId: "cendis-noc26",
+    storageBucket: "cendis-noc26.firebasestorage.app",
+    messagingSenderId: "154600562289",
+    appId: "1:154600562289:web:0fcbfa4f1adcb4e2f805d0"
+  };
+
+  const configurado = firebaseConfig.apiKey && firebaseConfig.apiKey.indexOf("TU_") !== 0;
+  window.FB_ON = configurado;
+
+  if (configurado) {
+    try {
+      const fbApp = initializeApp(firebaseConfig);
+      const db_fb = getFirestore(fbApp);
+
+      window.fbSave = async (col, id, data) => {
+        try { await setDoc(doc(db_fb, col, String(id)), { payload: JSON.stringify(data) }); return true; }
+        catch(e){ console.warn('fbSave', e); return false; }
+      };
+      window.fbLoad = async (col, id) => {
+        try { const s = await getDoc(doc(db_fb, col, String(id)));
+          if (s.exists()) return JSON.parse(s.data().payload); } catch(e){ console.warn('fbLoad', e); }
+        return null;
+      };
+      window.fbDelete = async (col, id) => {
+        try { await deleteDoc(doc(db_fb, col, String(id))); return true; } catch(e){ console.warn('fbDelete', e); return false; }
+      };
+      window.fbLoadAll = async (col) => {
+        const out = {};
+        try { const qs = await getDocs(collection(db_fb, col));
+          qs.forEach(d => { try { out[d.id] = JSON.parse(d.data().payload); } catch(e){} }); } catch(e){ console.warn('fbLoadAll', e); }
+        return out;
+      };
+      window.fbListenCol = (col, cb) =>
+        onSnapshot(collection(db_fb, col), qs => {
+          const out = {}; qs.forEach(d => { try { out[d.id] = JSON.parse(d.data().payload); } catch(e){} }); cb(out);
+        }, e => { console.warn('listen', e); window.fbSetStatus && window.fbSetStatus(false); });
+      window.fbListenDoc = (col, id, cb) =>
+        onSnapshot(doc(db_fb, col, String(id)), s => { if (s.exists()) { try { cb(JSON.parse(s.data().payload)); } catch(e){} } });
+
+      window.fbSetStatus = (online) => {
+        const dot = document.getElementById('fb-dot'); const txt = document.getElementById('fb-txt');
+        if (dot) dot.style.background = online ? '#00A499' : '#C8102E';
+        if (txt) txt.textContent = online ? '☁ En línea' : '○ Sin conexión';
+      };
+      const _go=()=>{ if (window.appFbInit) window.appFbInit(); else setTimeout(_go,200); };
+      if (document.readyState==='complete') _go(); else window.addEventListener('load', _go);
+    } catch(e){ console.error('Firebase init', e); window.FB_ON = false; }
+  }
+</script>
+<style>
+:root{
+  --azul1:#001E62; --azul2:#418FDE; --teal:#00A499; --morado:#470A68; --oliva:#A8AD00;
+  --rojo:#C8102E; --gris:#647188; --rejilla:#E5E9F0; --fondo:#F2F5F9; --linea:#C9D1DE; --card:#FFFFFF;
+  color-scheme: light;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;background:var(--fondo);color:#1b2436;font-size:14px;padding-bottom:44px}
+[hidden]{display:none!important}
+.hdr{background:var(--azul1);color:#fff;padding:14px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;box-shadow:0 2px 10px rgba(0,30,98,.18)}
+.hdr .logo svg{height:30px;width:auto;display:block}
+.hdr h1{font-size:17px;margin:0;font-weight:700}
+.hdr .sub{font-size:11px;opacity:.8;margin-top:1px}
+.hdr .right{margin-left:auto;text-align:right;font-size:11px;opacity:.92;line-height:1.5}
+.hdr .right b{font-size:13px}
+.hdr .cfgbtn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);color:#fff;border-radius:8px;padding:7px 12px;font-size:12px;font-weight:600;cursor:pointer}
+nav.tabs{display:flex;gap:4px;background:#fff;padding:6px 14px;border-bottom:1px solid var(--linea);overflow-x:auto;position:sticky;top:0;z-index:50}
+nav.tabs button{background:transparent;border:0;padding:10px 15px;font-size:13px;font-weight:600;color:var(--gris);cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;border-radius:8px 8px 0 0}
+nav.tabs button.active{color:var(--azul1);border-bottom-color:var(--azul2);background:#f3f7fd}
+main{padding:18px;max-width:1320px;margin:0 auto}
+section.view{display:none}section.view.active{display:block}
+.card{background:var(--card);border:1px solid var(--rejilla);border-radius:14px;padding:18px;margin-bottom:16px;box-shadow:0 1px 3px rgba(0,30,98,.05)}
+.card h2{margin:0 0 4px;font-size:16px;color:var(--azul1)}
+.card h3{margin:0 0 8px;font-size:14px;color:var(--azul1)}
+.hint{color:var(--gris);font-size:12px;margin:0 0 12px}
+.row{display:flex;gap:14px;flex-wrap:wrap}.col{flex:1;min-width:260px}
+label.fld{display:block;font-size:12px;font-weight:700;color:var(--azul1);margin:0 0 5px}
+textarea,input,select{width:100%;font-family:inherit;font-size:13px;border:1px solid var(--linea);border-radius:8px;padding:8px 10px;background:#fff;color:#1b2436}
+textarea{min-height:110px;resize:vertical;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px}
+input,select{min-height:38px}
+.btn{background:var(--azul1);color:#fff;border:0;border-radius:9px;padding:10px 18px;font-size:13px;font-weight:700;cursor:pointer;min-height:38px}
+.btn:hover{background:#00164a}
+.btn.sec{background:#fff;color:var(--azul1);border:1.5px solid var(--azul1)}
+.btn.teal{background:var(--teal)}
+.btn.ghost{background:transparent;color:var(--gris);border:1px solid var(--linea)}
+.btn.danger{background:#fff;color:var(--rojo);border:1.5px solid var(--rojo)}
+.btn.sm{padding:6px 11px;font-size:12px;min-height:32px;border-radius:7px}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.drop{border:2px dashed var(--linea);border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:.15s;background:#fafbfd}
+.drop:hover{border-color:var(--azul2)}
+.drop.ok{border-color:var(--teal);background:#f0fbfa}
+.drop .big{font-weight:700;color:var(--azul1)}
+.drop .small{color:var(--gris);font-size:11.5px;margin-top:3px}
+.drop .cnt{color:#006b63;font-weight:700;font-size:12px;margin-top:6px}
+details.paste{margin-top:8px}details.paste summary{cursor:pointer;color:var(--azul2);font-size:12px;font-weight:600}
+.msg{border-radius:9px;padding:10px 14px;font-size:13px;font-weight:600;margin-top:10px}
+.msg.ok{background:#e8f8f6;color:#006b63;border:1px solid #9fdcd6}
+.msg.err{background:#fdeef0;color:#9a0d22;border:1px solid #f1b9c1}
+.msg.info{background:#eef4fd;color:#17417e;border:1px solid #bcd4f2}
+.msg.warn{background:#fff8e1;color:#7a5600;border:1px solid #f2d27a}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:14px}
+.kpi{background:#fff;border:1px solid var(--rejilla);border-left:5px solid var(--azul2);border-radius:12px;padding:13px 15px}
+.kpi .v{font-size:24px;font-weight:800;color:var(--azul1);line-height:1.05;word-break:break-word}
+.kpi .v.s{font-size:15px}
+.kpi .l{font-size:10.5px;color:var(--gris);margin-top:5px;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
+.kpi .x{font-size:11px;color:var(--gris);margin-top:2px}
+.kpi.alert{border-left-color:var(--rojo)}.kpi.alert .v{color:var(--rojo)}
+.kpi.good{border-left-color:var(--teal)}.kpi.good .v{color:var(--teal)}
+.diag{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px;font-size:12.5px}
+.diag div{background:#f7f9fc;border:1px solid var(--rejilla);border-radius:8px;padding:8px 10px}
+.diag b{color:var(--azul1)}
+.tbl-wrap{overflow:auto;border-radius:10px;border:1px solid var(--rejilla)}
+table.data{border-collapse:collapse;width:100%;font-size:12.5px;background:#fff}
+table.data th,table.data td{padding:7px 10px;text-align:center;border-bottom:1px solid #eef1f6;white-space:nowrap}
+table.data thead th{background:var(--azul1);color:#fff;font-weight:700;position:sticky;top:0;z-index:1}
+table.data tbody tr:nth-child(even){background:#f7f9fc}
+table.data td.lbl{text-align:left;font-weight:700;color:var(--azul1)}
+table.data tr.tot td{background:var(--azul1);color:#fff;font-weight:800}
+table.data td.tt{background:#0f2340;color:#fff;font-weight:800}
+table.data td.zero{color:#c3cad6}
+table.data td.l{text-align:left}
+.vh{background:#C8102E;color:#fff;font-weight:800;border-radius:6px;padding:2px 7px}
+.vm{background:#F5C1C8;color:#7a0a1c;font-weight:800;border-radius:6px;padding:2px 7px}
+.vl{color:#0a2e80;font-weight:700}
+.desc{max-width:280px;overflow:hidden;text-overflow:ellipsis;text-align:left!important}
+.sel-in{min-height:30px;padding:3px 6px;font-size:11.5px;border-radius:6px;min-width:150px;width:auto}
+.sel-in.vacio{border-color:#f1b9c1;background:#fff7f8}
+.pill{display:inline-block;padding:2px 9px;border-radius:999px;font-size:11px;font-weight:700}
+.pill.g{background:#e8f8f6;color:#006b63}.pill.r{background:#fdeef0;color:#9a0d22}.pill.n{background:#eef1f6;color:#647188}.pill.b{background:#e3eefb;color:#0a2e80}
+.nota-in{min-height:30px;padding:4px 8px;font-size:12px;border-radius:6px;min-width:210px;width:100%}
+.nota-in:not(:placeholder-shown){border-color:#418FDE;background:#f3f8fe}
+.h3x{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.btn.png{padding:3px 10px;font-size:11px;min-height:26px;border-radius:6px;background:#fff;color:#001E62;border:1px solid #9BC4EF;font-weight:700;flex-shrink:0}
+.btn.png:hover{background:#eef4fd}
+.sug{font-size:10px;color:var(--azul2);font-weight:700;margin-left:3px}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:12px}
+.toolbar .f{min-width:130px;flex:0 1 auto}
+.seg{display:inline-flex;border:1px solid var(--linea);border-radius:9px;overflow:hidden}
+.seg button{border:0;background:#fff;padding:8px 14px;font-size:12px;font-weight:700;color:var(--gris);cursor:pointer;min-height:36px}
+.seg button.active{background:var(--azul1);color:#fff}
+.chartbox{position:relative;height:300px}.chartbox.t{height:380px}.chartbox.xt{height:440px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.bar-in{display:inline-block;height:9px;background:var(--azul2);border-radius:4px;vertical-align:middle;margin-right:6px}
+.modal{position:fixed;inset:0;background:rgba(0,20,60,.5);display:none;align-items:flex-start;justify-content:center;z-index:200;padding:30px 14px;overflow:auto}
+.modal.open{display:flex}
+.modal .box{background:#fff;border-radius:16px;max-width:680px;width:100%;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.modal .box h3{margin:0 0 4px;color:var(--azul1);font-size:17px}
+.modal .x{float:right;cursor:pointer;color:var(--gris);font-size:20px;border:0;background:none}
+.chk-line{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;color:var(--azul1)}
+.chk-line input{width:auto;min-height:auto}
+.hist-row{display:flex;align-items:center;gap:14px;padding:11px 4px;border-bottom:1px solid #eef1f6;flex-wrap:wrap}
+.hist-row .f{font-weight:800;color:var(--azul1);min-width:96px}
+.hist-row .m{flex:1;min-width:220px;font-size:13px}
+.hist-row.act{background:#f3f7fd;border-radius:8px}
+.progress{height:8px;background:#eef1f6;border-radius:6px;overflow:hidden;margin-top:8px}
+.progress div{height:100%;background:var(--teal);width:0}
+#fb-status{position:fixed;bottom:12px;right:12px;z-index:9999;background:rgba(0,20,60,.88);color:#fff;font-size:10px;font-weight:700;padding:5px 12px;border-radius:20px;display:flex;align-items:center;gap:6px}
+#fb-dot{width:7px;height:7px;border-radius:50%;background:#A8AD00}
+@media (max-width:820px){.grid2{grid-template-columns:1fr}.hdr .right{margin-left:0;text-align:left;width:100%}}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <span class="logo"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 651.086 127.269" role="img" aria-label="Farmatodo"><g transform="translate(-274.914,-212.531)"><path fill="#FFFFFF" fill-rule="evenodd" d="M 274.914 212.531 L 396.027 212.531 L 396.027 337.762 L 274.914 337.762 Z M 278.156 215.773 L 392.785 215.773 L 392.785 334.52 L 278.156 334.52 Z"/><path fill="#FFFFFF" d="M 355.723 334.48 C 357.199 329.133 358.008 323.523 358.008 317.719 C 358.008 282.898 329.805 254.676 294.965 254.676 C 289.148 254.676 283.508 255.496 278.145 256.973 L 278.145 334.48 Z M 335.555 320.691 C 330.094 327.109 319.922 328.559 313.488 323.109 C 307.102 317.664 306.328 308.055 311.754 301.637 C 318.035 294.242 342.586 283.281 342.844 283.309 C 343.293 283.355 341.402 313.789 335.555 320.691 M 309.715 261.34 C 319.457 263.168 341.734 279.398 341.844 279.66 C 342.047 280.055 314.008 293.906 304.883 292.215 C 296.414 290.621 289.934 282.297 291.504 273.836 C 293.086 265.344 301.246 259.773 309.715 261.34 "/><path fill="#FFFFFF" d="M 348.461 271.805 C 348.629 271.578 349.84 243.504 346.027 234.09 C 342.738 225.93 333.438 221.961 325.27 225.281 C 317.09 228.582 313.488 238.734 316.793 246.914 C 320.348 255.707 348.223 272.211 348.461 271.805 "/><path fill="#FFFFFF" d="M 376.469 225.281 C 368.297 221.961 359.004 225.93 355.719 234.09 C 351.887 243.504 353.105 271.578 353.285 271.805 C 353.523 272.215 381.391 255.707 384.941 246.914 C 388.25 238.73 384.648 228.586 376.469 225.281 "/><path fill="#FFFFFF" d="M 544.539 277.754 C 538.586 275.535 534.387 275.535 526.348 275.535 L 511.953 275.535 L 511.953 337.762 L 526.348 337.762 L 526.348 321.148 L 534.957 321.148 C 540.648 321.148 543.715 326.199 543.715 330.926 L 543.715 337.762 L 557.562 337.762 L 557.562 328.605 C 557.562 320.309 555.34 317.59 552.098 315.051 C 554.715 312.105 558.297 307.809 558.297 296.762 C 558.297 287.57 553.023 280.906 544.539 277.754 M 533.285 308.441 L 526.348 308.441 L 526.348 289.582 C 527.828 289.605 529.863 289.617 532.652 289.617 C 540.547 289.617 543.906 294.359 543.906 298.988 C 543.906 304.957 539.688 308.441 533.285 308.441 M 407.75 337.762 L 423.062 337.762 L 423.062 314.988 L 446.871 314.988 L 446.871 300.648 L 423.062 300.648 L 423.062 290.203 L 453.684 290.203 L 453.684 275.535 L 407.75 275.535 Z M 455.648 307.445 L 455.648 337.762 L 470.676 337.762 L 470.676 321.328 L 487.211 321.328 L 487.211 337.762 L 501.785 337.762 L 501.785 275.535 L 485.848 275.535 C 467.055 275.535 455.648 291.512 455.648 307.445 M 487.211 308.473 L 470.809 308.473 L 470.809 302.777 C 470.809 294.992 478.074 289.82 485.848 289.82 C 486.305 289.82 486.766 289.844 487.211 289.859 Z M 600.52 285.859 L 600.453 285.582 C 597.703 276.145 591.457 275.57 580.281 275.535 L 565.676 275.535 L 565.676 337.762 L 580.281 337.762 L 580.281 290.102 C 585.293 289.055 592.422 290.824 592.422 302.352 L 592.422 337.762 L 607.836 337.762 L 607.836 302.352 C 607.836 290.824 614.961 289.055 619.957 290.102 L 619.957 337.762 L 634.547 337.762 L 634.547 275.535 L 619.957 275.535 C 608.801 275.57 603.281 276.305 600.52 285.859 M 894.664 275.535 C 877.387 275.535 863.348 289.922 863.348 307.676 C 863.348 325.402 877.387 339.801 894.664 339.801 C 911.973 339.801 926 325.402 926 307.676 C 926 289.922 911.973 275.535 894.664 275.535 M 894.664 323.742 C 886.188 323.742 879.32 316.551 879.32 307.676 C 879.32 298.773 886.188 291.582 894.664 291.582 C 903.16 291.582 910.043 298.773 910.043 307.676 C 910.043 316.551 903.16 323.742 894.664 323.742 M 829.051 275.535 C 828.172 275.535 827.289 275.57 826.434 275.656 L 826.434 275.535 L 811.844 275.535 L 811.844 337.762 L 826.434 337.66 C 827.289 337.719 828.172 337.762 829.051 337.762 C 845.98 337.762 859.711 323.824 859.711 306.648 C 859.711 289.48 845.98 275.535 829.051 275.535 M 829.051 323.379 C 828.152 323.379 827.285 323.312 826.434 323.172 L 826.434 290.145 C 827.285 289.996 828.152 289.941 829.051 289.941 C 838.285 289.941 845.773 297.41 845.773 306.648 C 845.773 315.887 838.285 323.379 829.051 323.379 M 775.133 275.535 C 757.848 275.535 743.812 289.922 743.812 307.676 C 743.812 325.402 757.848 339.801 775.133 339.801 C 792.414 339.801 806.449 325.402 806.449 307.676 C 806.449 289.922 792.414 275.535 775.133 275.535 M 775.133 323.742 C 766.621 323.742 759.758 316.551 759.758 307.676 C 759.758 298.773 766.621 291.582 775.133 291.582 C 783.605 291.582 790.504 298.773 790.504 307.676 C 790.504 316.551 783.605 323.742 775.133 323.742 M 746.73 275.535 L 695.461 275.535 L 695.461 288.754 L 714.656 288.754 L 714.656 337.762 L 729.227 337.762 L 729.227 288.754 L 746.73 288.754 Z M 645.184 307.445 L 645.184 337.762 L 660.215 337.762 L 660.215 321.328 L 676.742 321.328 L 676.742 337.762 L 691.336 337.762 L 691.336 275.535 L 675.375 275.535 C 656.594 275.535 645.184 291.512 645.184 307.445 M 676.742 308.473 L 660.348 308.473 L 660.348 302.777 C 660.348 294.992 667.598 289.82 675.375 289.82 C 675.848 289.82 676.297 289.844 676.742 289.859 Z M 676.742 308.473 "/></g></svg></span>
+  <div><h1>Cancelaciones Pro</h1><div class="sub">Unidades canceladas · Piso × Ola · Causa raíz · CENDIS Charallave</div></div>
+  <div class="right"><div><b id="hoy">—</b></div><div id="estado-datos">Sin jornada activa</div></div>
+  <button class="cfgbtn" onclick="abrirConfig()">⚙ Catálogos</button>
+</header>
+
+<nav class="tabs">
+  <button data-v="carga" class="active" onclick="ir('carga')">📥 Carga</button>
+  <button data-v="pisoola" onclick="ir('pisoola')">▦ Piso × Ola</button>
+  <button data-v="detalle" onclick="ir('detalle')">📋 Detalle</button>
+  <button data-v="analisis" onclick="ir('analisis')">📈 Análisis</button>
+  <button data-v="gerencial" onclick="ir('gerencial')">🏛 Gerencial</button>
+  <button data-v="historial" onclick="ir('historial')">🗂 Historial</button>
+</nav>
+
+<main>
+<!-- ═════ CARGA ═════ -->
+<section class="view active" id="v-carga">
+  <div class="card">
+    <h2>Cargar reportes de la jornada</h2>
+    <p class="hint">Sube los Excel tal cual salen de Oracle (o pégalos). La herramienta busca sola la fila de encabezados, cruza R121 ↔ R031 por ITEM_ID, saca el piso (1er carácter de la Zona) y consolida ítem + ola.</p>
+    <div class="row">
+      <div class="col">
+        <div class="drop" id="drop121" onclick="document.getElementById('f121').click()">
+          <div class="big">R121 — Canceladas</div>
+          <div class="small">WAVE_NBR · ITEM_ID · UNIT_QTY · DESCRIPTION · CYCLE_COUNT_STATUS</div>
+          <div class="cnt" id="n121"></div>
+        </div>
+        <input type="file" id="f121" accept=".xlsx,.xls,.csv,.txt" hidden>
+        <details class="paste"><summary>o pegar desde Excel</summary><textarea id="t121" placeholder="Copia el reporte completo (con encabezados) y pégalo aquí"></textarea></details>
+      </div>
+      <div class="col">
+        <div class="drop" id="drop031" onclick="document.getElementById('f031').click()">
+          <div class="big">R031 — Inventario picking</div>
+          <div class="small">Item · Zona (1er carácter = piso) · Ubicación de despacho</div>
+          <div class="cnt" id="n031"></div>
+        </div>
+        <input type="file" id="f031" accept=".xlsx,.xls,.csv,.txt" hidden>
+        <details class="paste"><summary>o pegar desde Excel</summary><textarea id="t031" placeholder="Copia el reporte completo (con encabezados) y pégalo aquí"></textarea></details>
+      </div>
+    </div>
+    <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end">
+      <button class="btn" id="btn-run" onclick="generar()" disabled>► Generar análisis</button>
+      <button class="btn ghost" onclick="limpiarCarga()">Limpiar</button>
+    </div>
+    <div id="msg-carga"></div>
+  </div>
+
+  <div class="card" id="card-diag" hidden>
+    <h2>Verificación del cruce R121 ↔ R031</h2>
+    <p class="hint">Revisa que las unidades leídas coincidan con el reporte. Si algo no cuadra, aquí se ve dónde.</p>
+    <div class="diag" id="diag"></div>
+    <div id="diag-warn"></div>
+  </div>
+
+  <div class="card" id="card-cierre" hidden>
+    <h2>Cerrar jornada</h2>
+    <p class="hint">Asigna Dpto. responsable y Justificación en <b>📋 Detalle</b> (puedes hacerlo antes o después de cerrar). Al cerrar, la jornada queda en el historial y se sincroniza.</p>
+    <div class="toolbar">
+      <div class="f"><label class="fld">Fecha de la jornada</label><input type="date" id="fecha-jornada" onchange="checkFecha()"></div>
+      <button class="btn teal" onclick="cerrarJornada()">💾 Cerrar / guardar jornada</button>
+    </div>
+    <div id="msg-cierre"></div>
+  </div>
+</section>
+
+<!-- ═════ PISO × OLA ═════ -->
+<section class="view" id="v-pisoola">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px">
+      <div><h2 id="po-titulo">Unidades canceladas por piso y ola</h2><p class="hint" id="po-sub"></p></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn sec sm" onclick="exportTablaImagen('tbl-piso','TABLA DINÁMICA — PISO × OLA','piso_ola')">⬇ Imagen Piso × Ola</button>
+        <button class="btn sec sm" onclick="exportTablaImagen('tbl-dpto','TABLA — DPTO. RESPONSABLE × OLA','dpto_ola')">⬇ Imagen Dpto × Ola</button>
+        <button class="btn sec sm" onclick="exportTablaImagen('tbl-just','TABLA — JUSTIFICACIÓN × OLA','justificacion_ola')">⬇ Imagen Just. × Ola</button>
+        <button class="btn sec sm" onclick="exportExcelJornada()">⬇ Excel</button>
+      </div>
+    </div>
+    <div class="tbl-wrap"><table class="data" id="tbl-piso"></table></div>
+    <p class="hint" style="margin-top:6px">Color: <span class="vh">≥ p90</span> <span class="vm">≥ p75</span> — celdas críticas de la jornada.</p>
+    <h3 class="h3x" style="margin-top:18px">Departamento responsable × Ola <button class="btn png" onclick="exportTablaImagen('tbl-dpto','TABLA — DPTO. RESPONSABLE × OLA','dpto_ola')">⬇ PNG</button></h3>
+    <div class="tbl-wrap"><table class="data" id="tbl-dpto"></table></div>
+    <h3 class="h3x" style="margin-top:18px">Justificación × Ola <button class="btn png" onclick="exportTablaImagen('tbl-just','TABLA — JUSTIFICACIÓN × OLA','justificacion_ola')">⬇ PNG</button></h3>
+    <div class="tbl-wrap"><table class="data" id="tbl-just"></table></div>
+  </div>
+</section>
+
+<!-- ═════ DETALLE ═════ -->
+<section class="view" id="v-detalle">
+  <div class="card">
+    <h2 id="det-titulo">Detalle por ítem</h2>
+    <p class="hint">Asigna <b>Dpto. responsable</b> y <b>Justificación</b> por ítem (aplica a todas sus olas). Los valores con <span class="sug">↺</span> vienen sugeridos del último registro histórico del ítem. Se guarda solo, en tiempo real.</p>
+    <div class="toolbar">
+      <div class="f"><label class="fld">Piso</label><select id="f-piso" onchange="renderDetalle()"></select></div>
+      <div class="f"><label class="fld">Ola</label><select id="f-ola" onchange="renderDetalle()"></select></div>
+      <div class="f"><label class="fld">Dpto. responsable</label><select id="f-dpto" onchange="renderDetalle()"></select></div>
+      <div class="f"><label class="fld">Justificación</label><select id="f-just" onchange="renderDetalle()"></select></div>
+      <div class="f"><label class="fld">Estado</label><select id="f-est" onchange="renderDetalle()">
+        <option value="">Todos</option><option value="pend">Pendientes (sin Dpto o Just.)</option><option value="ok">Gestionados</option><option value="sug">Con sugerencia ↺</option><option value="nota">Con nota</option><option value="sinnota">Sin nota</option></select></div>
+      <div class="f" style="flex:1;min-width:200px"><label class="fld">Buscar</label><input type="text" id="f-q" placeholder="Descripción, ítem o nota…" oninput="renderDetalle()"></div>
+    </div>
+    <div class="kpis" id="kpis-det"></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:center">
+      <span style="font-size:12px;font-weight:700;color:var(--azul1)">Asignar a lo filtrado:</span>
+      <select id="m-dpto" class="sel-in" style="width:auto"></select>
+      <select id="m-just" class="sel-in" style="width:auto"></select>
+      <button class="btn sec sm" onclick="asignarMasivo()">Aplicar</button>
+      <button class="btn teal sm" onclick="rellenarSugerencias()">↺ Rellenar vacíos desde histórico</button>
+      <button class="btn ghost sm" onclick="aceptarSugerencias()">✓ Aceptar sugerencias ↺ visibles</button>
+      <button class="btn sec sm" onclick="nuevaOpcionUI('dptos')">＋ Agregar responsable</button>
+      <button class="btn sec sm" onclick="nuevaOpcionUI('justs')">＋ Agregar justificación</button>
+      <button class="btn sec sm" style="margin-left:auto" onclick="exportExcelJornada()">⬇ Exportar Excel</button>
+    </div>
+    <div class="tbl-wrap" style="max-height:64vh"><table class="data" id="tbl-det"></table></div>
+    <div class="hint" id="rec-count" style="margin-top:8px"></div>
+  </div>
+</section>
+
+<!-- ═════ ANÁLISIS (jornada) ═════ -->
+<section class="view" id="v-analisis">
+  <div class="card"><h2 id="an-titulo">Análisis de la jornada</h2><p class="hint">¿Dónde, cuándo y por qué se canceló hoy?</p><div class="kpis" id="kpis-an"></div></div>
+  <div class="card"><div class="grid2">
+    <div><h3>Unidades por piso</h3><div class="chartbox"><canvas id="c-piso"></canvas></div></div>
+    <div><h3>Unidades por ola</h3><div class="chartbox"><canvas id="c-ola"></canvas></div></div>
+  </div></div>
+  <div class="card"><div class="grid2">
+    <div><h3>Por departamento responsable (unidades)</h3><div class="chartbox t"><canvas id="c-dpto"></canvas></div></div>
+    <div><h3>Por justificación (unidades)</h3><div class="chartbox t"><canvas id="c-just"></canvas></div></div>
+  </div></div>
+  <div class="card">
+    <h3 class="h3x">Matriz causa raíz · Dpto. responsable × Justificación (unidades) <button class="btn png" onclick="exportTablaImagen('tbl-matriz','MATRIZ CAUSA RAÍZ — DPTO. × JUSTIFICACIÓN','matriz_causa_raiz')">⬇ PNG</button></h3>
+    <p class="hint">Cruce que muestra qué área genera qué tipo de cancelación.</p>
+    <div class="tbl-wrap"><table class="data" id="tbl-matriz"></table></div>
+  </div>
+  <div class="card"><div class="grid2">
+    <div><h3 class="h3x">Top 10 ítems más cancelados <button class="btn png" onclick="exportTablaImagen('tbl-top10','TOP 10 ÍTEMS MÁS CANCELADOS','top10_items')">⬇ PNG</button></h3><div class="tbl-wrap"><table class="data" id="tbl-top10"></table></div></div>
+    <div><h3 class="h3x">Por ubicación / zona de despacho (Top 15) <button class="btn png" onclick="exportTablaImagen('tbl-ubic','UNIDADES POR UBICACIÓN DE DESPACHO','ubicacion_despacho')">⬇ PNG</button></h3><div class="tbl-wrap"><table class="data" id="tbl-ubic"></table></div></div>
+  </div></div>
+  <div class="card"><h3 class="h3x">Notas / reseñas de la jornada <button class="btn png" onclick="exportTablaImagen('tbl-notas','NOTAS DE CANCELACIÓN','notas_jornada')">⬇ PNG</button></h3>
+    <p class="hint">Comentarios escritos en Detalle, ordenados por unidades.</p><div class="tbl-wrap"><table class="data" id="tbl-notas"></table></div></div>
+</section>
+
+<!-- ═════ GERENCIAL ═════ -->
+<section class="view" id="v-gerencial">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px">
+      <div><h2>Panel gerencial · histórico</h2><p class="hint" id="g-sub">Tendencias y causas raíz consolidadas de todas las jornadas.</p></div>
+      <div class="toolbar" style="margin:0">
+        <div class="f"><label class="fld">Año</label><select id="g-anio" onchange="renderGerencial()"></select></div>
+        <div class="f"><label class="fld">Mes</label><select id="g-mes" onchange="renderGerencial()"></select></div>
+        <div><label class="fld">Agrupar por</label><div class="seg" id="seg-p">
+          <button data-p="D" onclick="setPeriodo('D')">Día</button><button data-p="S" class="active" onclick="setPeriodo('S')">Semana</button><button data-p="M" onclick="setPeriodo('M')">Mes</button></div></div>
+        <label class="chk-line" style="margin-bottom:9px"><input type="checkbox" id="g-excl" checked onchange="renderGerencial()"> Excluir eventos singulares</label>
+      </div>
+    </div>
+    <div class="kpis" id="kpis-ger"></div>
+    <div id="g-excl-box"></div>
+  </div>
+  <div class="card"><h3 id="t-tend">Unidades canceladas por período</h3><div class="chartbox t"><canvas id="g-tend"></canvas></div></div>
+  <div class="card"><h3>Departamentos responsables · período a período</h3><p class="hint">Quién genera más cancelaciones y cómo evoluciona.</p><div class="chartbox xt"><canvas id="g-dpto-p"></canvas></div></div>
+  <div class="card"><h3>Justificaciones · período a período</h3><p class="hint">Qué motivos crecen o bajan.</p><div class="chartbox xt"><canvas id="g-just-p"></canvas></div></div>
+  <div class="card"><div class="grid2">
+    <div><h3>Pareto · Justificación</h3><div class="chartbox t"><canvas id="g-par-just"></canvas></div></div>
+    <div><h3>Pareto · Dpto. responsable</h3><div class="chartbox t"><canvas id="g-par-dpto"></canvas></div></div>
+  </div></div>
+  <div class="card"><div class="grid2">
+    <div><h3>Pareto · Piso</h3><div class="chartbox t"><canvas id="g-par-piso"></canvas></div></div>
+    <div><h3>% de ítems gestionados por período</h3><div class="chartbox t"><canvas id="g-gest"></canvas></div></div>
+  </div></div>
+  <div class="card">
+    <h3 class="h3x">Ítems reincidentes · Top 50 <button class="btn png" onclick="exportTablaImagen('g-items','ÍTEMS REINCIDENTES — TOP 50','items_reincidentes',$('g-sub').textContent)">⬇ PNG</button></h3>
+    <p class="hint">Ítems que se cancelan en muchas jornadas = problema estructural (ubicación, configuración, inventario). Ordenado por unidades.</p>
+    <div class="tbl-wrap" style="max-height:520px"><table class="data" id="g-items"></table></div>
+  </div>
+</section>
+
+<!-- ═════ HISTORIAL ═════ -->
+<section class="view" id="v-historial">
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px">
+      <div><h2>Historial de cierres de jornada</h2><p class="hint" id="h-sub"></p></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn sec sm" onclick="document.getElementById('fi-json').click()">⬆ Importar respaldo / migración (JSON)</button>
+        <button class="btn sec sm" onclick="document.getElementById('fi-xls').click()">⬆ Importar hoja Historial (Excel)</button>
+        <button class="btn sec sm" onclick="exportarRespaldo()">⬇ Respaldo JSON</button>
+        <input type="file" id="fi-json" accept=".json" hidden><input type="file" id="fi-xls" accept=".xlsx,.xls" hidden>
+      </div>
+    </div>
+    <div id="imp-prog"></div>
+    <div class="toolbar"><div class="f"><label class="fld">Mes</label><select id="h-mes" onchange="renderHistorial()"></select></div></div>
+    <div id="h-list"></div>
+  </div>
+</section>
+</main>
+
+<!-- ═════ MODAL CATÁLOGOS ═════ -->
+<div class="modal" id="modal-cfg">
+  <div class="box">
+    <button class="x" onclick="cerrarConfig()">✕</button>
+    <h3>Catálogos de las listas desplegables</h3>
+    <p class="hint">Uno por línea. Se sincronizan con todo el equipo. Renombrar un valor no cambia los registros ya guardados.</p>
+    <div class="row">
+      <div class="col"><label class="fld">Dpto. responsable</label><textarea id="cfg-dptos" style="min-height:260px;font-family:inherit;font-size:13px"></textarea></div>
+      <div class="col"><label class="fld">Justificación</label><textarea id="cfg-justs" style="min-height:260px;font-family:inherit;font-size:13px"></textarea></div>
+    </div>
+    <div style="margin-top:16px;display:flex;gap:10px;justify-content:flex-end">
+      <button class="btn ghost" onclick="cerrarConfig()">Cancelar</button><button class="btn" onclick="guardarConfig()">Guardar catálogos</button>
+    </div>
+  </div>
+</div>
+
+<div id="fb-status"><span id="fb-dot"></span><span id="fb-txt">Modo local</span></div>
+
+<script>
+/* ═══════════════ ESTADO ═══════════════ */
+var JORNADAS = {};            // { 'YYYY-MM-DD': {fecha,dateLabel,savedAt,items:[...]} }
+var BORRADOR = null;          // jornada generada aún no cerrada
+var CONFIG = null;            // { dptos:[], justs:[] }
+var activa = null;            // '__draft' o fecha ISO
+var SRC = { r121:null, r031:null };   // filas crudas (array de arrays)
+var periodo = 'S';
+var charts = {};
+var LS = { jor:'cancpro2_jornadas', cfg:'cancpro2_config', draft:'cancpro2_draft' };
+var MESES = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+var MESES_L = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+var FTD = { azul1:'#001E62', azul2:'#418FDE', gris:'#647188', rejilla:'#E5E9F0', rojo:'#C8102E',
+  series:['#001E62','#418FDE','#00A499','#470A68','#A8AD00','#6BA8E6','#221C35','#9BC4EF','#1F6BB8','#00C2B2','#7A8CA8','#C9D1DE'] };
+var SIN_D = 'Sin departamento', SIN_J = 'Sin justificación';
+var CONFIG_DEFAULT = {
+  dptos: ["DESPACHO PTL","CONTROL DE CALIDAD","RECEPCIÓN","REPOSICIÓN","ALMACENAJE","INVENTARIO","ADMINISTRACIÓN SLOT","BO","MANTENIMIENTO","OTRO"],
+  justs: ["CANCELACIONES POR SISTEMA","PUESTO DESCONCILIADO","CANCELACIÓN EN AJUSTE FTD","MERCANCIA EXTRAVIADA","SOBREDEMANDA","ERROR EN VOLUMETRIA","PUESTO EN 0","REQUERIMIENTO LEGAL","AUDITORIA EN CARGA","PUESTO CON ERROR DE CONTEO","PRODUCTO MAL CONFIGURADO","REPOSICIÓN A DESTIEMPO","MAL RECIBIDO","OTRO"]
+};
+if(window.Chart){ Chart.defaults.font.family='"Helvetica Neue",Helvetica,Arial,sans-serif'; Chart.defaults.font.size=12; Chart.defaults.color=FTD.gris; Chart.defaults.borderColor=FTD.rejilla; Chart.defaults.devicePixelRatio=Math.max(2,window.devicePixelRatio||1); }
+
+/* ═══════════════ UTILIDADES ═══════════════ */
+function $(id){ return document.getElementById(id); }
+function nf(n){ return (Number(n)||0).toLocaleString('es-VE'); }
+function pct(a,b){ return b? Math.round(a/b*1000)/10 : 0; }
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function hoyISO(){ var d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function fl(iso){ if(!iso||iso==='__draft') return 'Borrador'; var p=iso.split('-'); return p[2]+'/'+p[1]+'/'+p[0]; }
+function norm(v){ return String(v==null?'':v).trim().replace(/\.0+$/,''); }
+function num(v){ if(typeof v==='number') return v; var s=String(v==null?'':v).trim(); if(!s) return 0;
+  if(/^-?\d{1,3}(\.\d{3})+(,\d+)?$/.test(s)) s=s.replace(/\./g,'').replace(',','.'); else s=s.replace(',','.');
+  var n=parseFloat(s); return isNaN(n)?0:n; }
+function getPiso(z){ return String(z||'').trim().charAt(0).toUpperCase()||'?'; }
+function ordenar(a,b){ var na=!isNaN(a)&&a!=='', nb=!isNaN(b)&&b!==''; if(na&&nb) return Number(a)-Number(b); if(na) return -1; if(nb) return 1; return String(a).localeCompare(String(b)); }
+function destruir(k){ if(charts[k]){ charts[k].destroy(); delete charts[k]; } }
+function msg(id,txt,t){ $(id).innerHTML = txt? '<div class="msg '+(t||'info')+'">'+txt+'</div>' : ''; }
+function kpi(v,l,cls,x,small){ return '<div class="kpi '+(cls||'')+'"><div class="v'+(small?' s':'')+'">'+v+'</div><div class="l">'+l+'</div>'+(x?'<div class="x">'+x+'</div>':'')+'</div>'; }
+function uniq(a){ return Array.from(new Set(a)); }
+function sum(a,f){ return a.reduce(function(s,x){return s+(f?f(x):x);},0); }
+function gest(i){ return !!(i.dpto && i.just); }
+function semanaISO(iso){ var d=new Date(iso+'T00:00:00'); var day=(d.getDay()+6)%7; d.setDate(d.getDate()-day+3);
+  var y=d.getFullYear(); var t=new Date(y,0,4); var td=(t.getDay()+6)%7; t.setDate(t.getDate()-td+3);
+  return y+'-S'+String(1+Math.round((d-t)/(7*864e5))).padStart(2,'0'); }
+
+/* ═══════════════ LECTURA DE REPORTES ═══════════════ */
+function textoAFilas(text){
+  var lines=String(text||'').split(/\r?\n/).filter(function(l){return l.trim()!=='';});
+  return lines.map(function(l){
+    if(l.indexOf('\t')>=0) return l.split('\t');
+    if(l.indexOf(';')>=0) return l.split(';');
+    if(l.split(',').length>=3) return l.split(',');
+    return l.trim().split(/\s{2,}/);
+  });
+}
+function leerArchivo(file, cb){
+  var ext=(file.name.split('.').pop()||'').toLowerCase();
+  var r=new FileReader();
+  if(ext==='xlsx'||ext==='xls'){
+    r.onload=function(e){ try{ var wb=XLSX.read(e.target.result,{type:'array'});
+      cb(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1,defval:null,raw:true})); }
+      catch(err){ alert('No se pudo leer el Excel: '+err.message); } };
+    r.readAsArrayBuffer(file);
+  } else { r.onload=function(e){ cb(textoAFilas(e.target.result)); }; r.readAsText(file); }
+}
+// Busca la fila de encabezados: cada grupo debe tener al menos una celda que contenga alguna palabra
+function findHeader(rows, grupos){
+  for(var i=0;i<Math.min(rows.length,60);i++){
+    var r=rows[i]; if(!r) continue;
+    var vals=r.map(function(v){return String(v==null?'':v).toLowerCase().trim();});
+    var ok=grupos.every(function(g){ return vals.some(function(v){ return g.some(function(k){return v.indexOf(k)>=0;}); }); });
+    if(ok) return i;
+  }
+  return -1;
+}
+function colIdx(hdr, test){ for(var i=0;i<hdr.length;i++){ if(test(hdr[i])) return i; } return -1; }
+
+function parseR121(rows){
+  var hi=findHeader(rows,[['wave','ola'],['item']]);
+  if(hi<0) return {error:'R121: no encontré la fila de encabezados (WAVE_NBR / ITEM_ID).'};
+  var h=rows[hi].map(function(v){return String(v==null?'':v).toLowerCase().trim();});
+  var cW=colIdx(h,function(x){return x.indexOf('wave')>=0||x==='ola';});
+  var cI=colIdx(h,function(x){return x.indexOf('item')>=0&&x.indexOf('desc')<0;});
+  var cQ=colIdx(h,function(x){return x.indexOf('unit')>=0||x.indexOf('qty')>=0||x.indexOf('cant')>=0;});
+  var cD=colIdx(h,function(x){return x.indexOf('desc')>=0;});
+  var cC=colIdx(h,function(x){return x.indexOf('cycle')>=0||x.indexOf('status')>=0||x.indexOf('clase')>=0;});
+  if(cQ<0) return {error:'R121: no encontré la columna de unidades (UNIT_QTY).'};
+  var out=[], sinId=0;
+  rows.slice(hi+1).forEach(function(r){
+    if(!r||!r.some(function(v){return v!=null&&String(v).trim()!=='';})) return;
+    var id=norm(r[cI]); if(!id){ sinId++; return; }
+    if(/^total/i.test(id)) return;
+    out.push({id:id, wave:norm(r[cW]), qty:num(r[cQ]), desc:cD>=0?norm(r[cD]):'', clase:cC>=0?norm(r[cC]):''});
+  });
+  return {rows:out, hdrRow:hi+1, cols:{wave:rows[hi][cW],item:rows[hi][cI],qty:rows[hi][cQ],desc:cD>=0?rows[hi][cD]:'—',clase:cC>=0?rows[hi][cC]:'—'}};
+}
+function parseR031(rows){
+  var hi=findHeader(rows,[['item'],['zona']]);
+  if(hi<0) return {error:'R031: no encontré la fila de encabezados (Item / Zona).'};
+  var h=rows[hi].map(function(v){return String(v==null?'':v).toLowerCase().trim();});
+  var cI=colIdx(h,function(x){return x==='item';}); if(cI<0) cI=colIdx(h,function(x){return x.indexOf('item')>=0&&x.indexOf('desc')<0;});
+  var cZ=colIdx(h,function(x){return x==='zona';}); if(cZ<0) cZ=colIdx(h,function(x){return x.indexOf('zona')===0;});
+  var cU=colIdx(h,function(x){return x.indexOf('ubicacion')>=0||x.indexOf('ubicación')>=0||x.indexOf('despacho')>=0;});
+  var map={}, n=0;
+  rows.slice(hi+1).forEach(function(r){
+    if(!r) return; var id=norm(r[cI]); if(!id) return; n++;
+    if(!map[id]) map[id]={zona:norm(r[cZ]), ubic:cU>=0?norm(r[cU]):''};
+  });
+  return {map:map, filas:n, hdrRow:hi+1, cols:{item:rows[hi][cI],zona:rows[hi][cZ],ubic:cU>=0?rows[hi][cU]:'—'}};
+}
+
+/* Sugerencias: último Dpto/Just registrado por ítem en el histórico */
+function mapaSugerencias(excluirFecha){
+  var sug={};
+  if(window.SUG_BASE){ var B=SUG_BASE; Object.keys(B.m).forEach(function(id){ var v=B.m[id], f=v[2];
+    sug[id]={dpto:B.d[v[0]]||'',just:B.j[v[1]]||'',fecha:f.slice(0,4)+'-'+f.slice(4,6)+'-'+f.slice(6)}; }); }
+  Object.keys(JORNADAS).sort().forEach(function(f){ if(f===excluirFecha) return;
+    (JORNADAS[f].items||[]).forEach(function(i){ if((i.dpto||i.just) && (!sug[i.id]||f>=sug[i.id].fecha)) sug[i.id]={dpto:i.dpto,just:i.just,fecha:f}; }); });
+  return sug;
+}
+function rellenarSugerencias(){
+  var it=itemsAct(); if(!it.length) return;
+  var sug=mapaSugerencias(activa==='__draft'?null:activa), n=0;
+  it.forEach(function(i){ var s=sug[i.id]; if(!s) return; var c=false;
+    if(!i.dpto&&s.dpto){ i.dpto=s.dpto; c=true; } if(!i.just&&s.just){ i.just=s.just; c=true; } if(c){ i.sug=true; n++; } });
+  guardarActiva(); renderDetalle();
+  alert(n? n+' registro(s) vacíos se rellenaron con su último Dpto./Justificación (marcados ↺). Revísalos y corrige si cambió la causa.' : 'No hay sugerencias para los registros vacíos (ítems sin historial de asignación).');
+}
+
+/* ═══════════════ GENERAR ═══════════════ */
+function generar(){
+  var a=parseR121(SRC.r121||[]), b=parseR031(SRC.r031||[]);
+  if(a.error){ msg('msg-carga',a.error,'err'); return; }
+  if(b.error){ msg('msg-carga',b.error,'err'); return; }
+  var unidR121=sum(a.rows,function(r){return r.qty;});
+  var sinZona={}, items={};
+  a.rows.forEach(function(r){
+    var inf=b.map[r.id]; if(!inf){ sinZona[r.id]=true; }
+    var k=r.id+'|'+r.wave;
+    if(items[k]) items[k].qty+=r.qty;
+    else items[k]={id:r.id, desc:r.desc, wave:r.wave, qty:r.qty, clase:r.clase,
+      zona:inf?inf.zona:'', ubic:inf?inf.ubic:'', piso:inf?getPiso(inf.zona):'?', dpto:'', just:'', sug:false};
+  });
+  var lista=Object.keys(items).map(function(k){return items[k];});
+  // Prellenar con sugerencias del histórico
+  var sug=mapaSugerencias(null), nSug=0;
+  lista.forEach(function(i){ var s=sug[i.id]; if(s){ i.dpto=s.dpto||''; i.just=s.just||''; i.sug=true; nSug++; } });
+  lista.sort(function(x,y){return y.qty-x.qty;});
+  BORRADOR={fecha:'__draft', dateLabel:'Borrador', savedAt:null, items:lista};
+  activa='__draft'; guardarBorradorLocal();
+  var unidFin=sum(lista,function(i){return i.qty;});
+  var nSinZ=Object.keys(sinZona).length, uSinZ=sum(lista.filter(function(i){return i.piso==='?';}),function(i){return i.qty;});
+  $('card-diag').hidden=false; $('card-cierre').hidden=false;
+  $('diag').innerHTML=
+    '<div>R121 · encabezado en fila <b>'+a.hdrRow+'</b><br>Columnas: <b>'+esc(a.cols.wave)+'</b>, <b>'+esc(a.cols.item)+'</b>, <b>'+esc(a.cols.qty)+'</b></div>'+
+    '<div>R121 · registros leídos<br><b style="font-size:18px">'+nf(a.rows.length)+'</b></div>'+
+    '<div>R121 · unidades leídas<br><b style="font-size:18px">'+nf(unidR121)+'</b></div>'+
+    '<div>Consolidado ítem+ola<br><b style="font-size:18px">'+nf(lista.length)+'</b> registros · <b>'+nf(unidFin)+'</b> u.</div>'+
+    '<div>R031 · encabezado en fila <b>'+b.hdrRow+'</b><br>Columnas: <b>'+esc(b.cols.item)+'</b>, <b>'+esc(b.cols.zona)+'</b>, <b>'+esc(b.cols.ubic)+'</b></div>'+
+    '<div>R031 · ítems en catálogo<br><b style="font-size:18px">'+nf(Object.keys(b.map).length)+'</b></div>'+
+    '<div>Ítems sin zona en R031 (piso ?)<br><b style="font-size:18px;color:'+(nSinZ?'#C8102E':'#00A499')+'">'+nf(nSinZ)+'</b> · '+nf(uSinZ)+' u.</div>'+
+    '<div>Prellenados desde histórico ↺<br><b style="font-size:18px">'+nf(nSug)+'</b> registros</div>';
+  $('diag-warn').innerHTML = (unidFin!==unidR121? '<div class="msg err">Las unidades consolidadas no cuadran con el R121. Revisa el archivo.</div>':'') +
+    (nSinZ? '<div class="msg warn">⚠ '+nSinZ+' ítem(s) del R121 no aparecen en el R031 → quedan con piso "?". Verifica que el R031 sea el inventario completo.</div>':'<div class="msg ok">✓ Todos los ítems cruzaron con su zona de picking.</div>');
+  $('fecha-jornada').value = $('fecha-jornada').value || hoyISO(); checkFecha();
+  msg('msg-carga','✓ Análisis generado: '+nf(lista.length)+' registros · '+nf(unidFin)+' unidades. Revisa Piso × Ola y asigna en Detalle.','ok');
+  refrescar(); ir('pisoola');
+}
+function limpiarCarga(){ SRC={r121:null,r031:null}; ['n121','n031'].forEach(function(i){$(i).textContent='';});
+  ['drop121','drop031'].forEach(function(i){$(i).classList.remove('ok');}); $('t121').value=''; $('t031').value='';
+  $('btn-run').disabled=true; $('card-diag').hidden=true; msg('msg-carga',''); }
+function checkReady(){ $('btn-run').disabled=!(SRC.r121&&SRC.r031); }
+function checkFecha(){ var f=$('fecha-jornada').value; msg('msg-cierre', f&&JORNADAS[f]? '⚠ Ya existe un cierre para '+fl(f)+'. Se <b>sobrescribirá</b> con estos datos.':'', 'warn'); }
+
+async function cerrarJornada(){
+  if(!BORRADOR){ msg('msg-cierre','No hay borrador. Genera el análisis primero.','err'); return; }
+  var f=$('fecha-jornada').value; if(!f){ msg('msg-cierre','Selecciona la fecha de la jornada.','err'); return; }
+  if(JORNADAS[f] && !confirm('Ya existe la jornada '+fl(f)+'. ¿Sobrescribir?')) return;
+  var pend=BORRADOR.items.filter(function(i){return !gest(i);}).length;
+  var j={fecha:f, dateLabel:fl(f), savedAt:new Date().toLocaleString('es-VE'), items:BORRADOR.items.map(function(i){ var c=Object.assign({},i); delete c.sug; return c; })};
+  JORNADAS[f]=j; BORRADOR=null; activa=f; guardarBorradorLocal();
+  await persistJornada(f);
+  msg('msg-cierre','✓ Jornada '+fl(f)+' cerrada'+(window.FB_ON?' y sincronizada':' (local)')+'. '+(pend?pend+' registro(s) quedan pendientes de asignar; puedes completarlos luego desde Historial → Abrir.':''),'ok');
+  refrescar();
+}
+
+/* ═══════════════ PERSISTENCIA ═══════════════ */
+function persistLocal(){ try{ localStorage.setItem(LS.jor,JSON.stringify(JORNADAS)); }catch(e){} try{ localStorage.setItem(LS.cfg,JSON.stringify(CONFIG)); }catch(e){} }
+function guardarBorradorLocal(){ try{ if(BORRADOR) localStorage.setItem(LS.draft,JSON.stringify(BORRADOR)); else localStorage.removeItem(LS.draft); }catch(e){} }
+async function persistJornada(f){ persistLocal(); if(window.FB_ON&&window.fbSave){ var ok=await window.fbSave('canc_jornadas',f,JORNADAS[f]); window.fbSetStatus&&window.fbSetStatus(ok); } }
+async function persistConfig(){ persistLocal(); if(window.FB_ON&&window.fbSave) await window.fbSave('canc_config','main',CONFIG); }
+var _t=null;
+function guardarActiva(){ if(activa==='__draft'){ guardarBorradorLocal(); return; } clearTimeout(_t); _t=setTimeout(function(){ persistJornada(activa); },700); }
+
+window.appFbInit = async function(){
+  try{
+    window.fbSetStatus&&window.fbSetStatus(true);
+    var cfg=await window.fbLoad('canc_config','main');
+    if(cfg&&cfg.dptos){ if(CONFIG&&CONFIG.dptos){ CONFIG.dptos.forEach(function(d){ if(cfg.dptos.indexOf(d)<0) cfg.dptos.push(d); }); CONFIG.justs.forEach(function(j){ if(cfg.justs.indexOf(j)<0) cfg.justs.push(j); }); } CONFIG=cfg; }
+    else { if(!CONFIG||!CONFIG.dptos) CONFIG=JSON.parse(JSON.stringify(CONFIG_DEFAULT)); await window.fbSave('canc_config','main',CONFIG); }
+    var all=await window.fbLoadAll('canc_jornadas')||{};
+    // Jornadas que solo existen en este equipo se suben a la nube (no se pierden)
+    var soloLocal=Object.keys(JORNADAS).filter(function(f){ return !all[f]; });
+    for(var n=0;n<soloLocal.length;n++){ await window.fbSave('canc_jornadas',soloLocal[n],JORNADAS[soloLocal[n]]); all[soloLocal[n]]=JORNADAS[soloLocal[n]]; }
+    JORNADAS=all;
+    persistLocal(); boot();
+    window.fbListenCol('canc_jornadas',function(a){ JORNADAS=a||{}; persistLocal(); refrescar(); });
+    window.fbListenDoc('canc_config','main',function(c){ if(c&&c.dptos){ CONFIG=c; persistLocal(); refrescar(); } });
+  }catch(e){ console.warn(e); window.fbSetStatus&&window.fbSetStatus(false); }
+};
+
+/* ═══════════════ NAVEGACIÓN ═══════════════ */
+function vista(){ var b=document.querySelector('nav.tabs button.active'); return b?b.dataset.v:'carga'; }
+function ir(v){
+  document.querySelectorAll('section.view').forEach(function(s){s.classList.remove('active');});
+  $('v-'+v).classList.add('active');
+  document.querySelectorAll('nav.tabs button').forEach(function(b){b.classList.toggle('active',b.dataset.v===v);});
+  render(v); window.scrollTo(0,0);
+}
+function render(v){
+  if(v==='pisoola') renderPisoOla();
+  else if(v==='detalle'){ poblarFiltros(); renderDetalle(); }
+  else if(v==='analisis') renderAnalisis();
+  else if(v==='gerencial') renderGerencial();
+  else if(v==='historial') renderHistorial();
+}
+function refrescar(){
+  if(activa!=='__draft' && (!activa||!JORNADAS[activa])){ var fs=Object.keys(JORNADAS).sort(); activa= BORRADOR?'__draft':(fs.length?fs[fs.length-1]:null); }
+  $('estado-datos').innerHTML = activa? ('Jornada en vista: <b>'+fl(activa)+'</b>'+(activa==='__draft'?' (sin cerrar)':'')) : 'Sin jornada activa';
+  render(vista());
+}
+function boot(){
+  if(!CONFIG||!CONFIG.dptos) CONFIG=JSON.parse(JSON.stringify(CONFIG_DEFAULT));
+  $('hoy').textContent=fl(hoyISO()); refrescar();
+}
+function jAct(){ return activa==='__draft'? BORRADOR : (activa? JORNADAS[activa]:null); }
+function itemsAct(){ var j=jAct(); return j? (j.items||[]) : []; }
+
+/* ═══════════════ TABLAS DINÁMICAS ═══════════════ */
+function pivot(items, keyFn){
+  var waves=uniq(items.map(function(i){return i.wave;})).sort(ordenar);
+  var rows=uniq(items.map(keyFn));
+  var g={}, rt={}, ct={}, tot=0;
+  rows.forEach(function(r){ g[r]={}; rt[r]=0; }); waves.forEach(function(w){ct[w]=0;});
+  items.forEach(function(i){ var r=keyFn(i); g[r][i.wave]=(g[r][i.wave]||0)+i.qty; rt[r]+=i.qty; ct[i.wave]+=i.qty; tot+=i.qty; });
+  return {waves:waves, rows:rows, g:g, rt:rt, ct:ct, tot:tot};
+}
+function pintarPivot(id, p, etiqueta, conPct, ordenRows){
+  var rows=p.rows.slice().sort(ordenRows||ordenar);
+  var vals=[]; rows.forEach(function(r){ p.waves.forEach(function(w){ var v=p.g[r][w]||0; if(v>0) vals.push(v); }); });
+  vals.sort(function(a,b){return a-b;}); var p75=vals[Math.floor(vals.length*.75)]||1e9, p90=vals[Math.floor(vals.length*.9)]||1e9;
+  var h='<thead><tr><th style="text-align:left">'+etiqueta+'</th>'+p.waves.map(function(w){return '<th>Ola '+esc(w)+'</th>';}).join('')+'<th>Total</th>'+(conPct?'<th>%</th>':'')+'</tr></thead><tbody>';
+  rows.forEach(function(r){
+    h+='<tr><td class="lbl">'+esc(r)+'</td>';
+    p.waves.forEach(function(w){ var v=p.g[r][w]||0;
+      h+= v? '<td><span class="'+(v>=p90?'vh':v>=p75?'vm':'vl')+'">'+nf(v)+'</span></td>' : '<td class="zero">—</td>'; });
+    h+='<td class="tt">'+nf(p.rt[r])+'</td>'+(conPct?'<td><b>'+pct(p.rt[r],p.tot)+'%</b></td>':'')+'</tr>';
+  });
+  h+='<tr class="tot"><td style="text-align:left">Total general</td>'+p.waves.map(function(w){return '<td>'+nf(p.ct[w])+'</td>';}).join('')+'<td>'+nf(p.tot)+'</td>'+(conPct?'<td>100%</td>':'')+'</tr></tbody>';
+  $(id).innerHTML=h;
+}
+function porTotalDesc(p){ return function(a,b){ if(a===SIN_D||a===SIN_J) return 1; if(b===SIN_D||b===SIN_J) return -1; return p.rt[b]-p.rt[a]; }; }
+function renderPisoOla(){
+  var it=itemsAct();
+  $('po-titulo').textContent='Unidades canceladas por piso y ola · '+(activa?fl(activa):'');
+  if(!it.length){ $('po-sub').textContent='Sin jornada. Carga reportes o abre una del Historial.'; ['tbl-piso','tbl-dpto','tbl-just'].forEach(function(i){$(i).innerHTML='';}); return; }
+  var pP=pivot(it,function(i){return i.piso;});
+  $('po-sub').textContent=nf(it.length)+' registros · '+nf(uniq(it.map(function(i){return i.id;})).length)+' ítems · '+nf(pP.tot)+' unidades · '+pP.rows.length+' pisos · '+pP.waves.length+' olas';
+  pintarPivot('tbl-piso',pP,'Piso',false);
+  var pD=pivot(it,function(i){return i.dpto||SIN_D;}); pintarPivot('tbl-dpto',pD,'Departamento',true,porTotalDesc(pD));
+  var pJ=pivot(it,function(i){return i.just||SIN_J;}); pintarPivot('tbl-just',pJ,'Justificación',true,porTotalDesc(pJ));
+}
+
+/* ═══════════════ DETALLE ═══════════════ */
+function opts(lista, sel, vacio){ return '<option value="">'+(vacio||'—')+'</option>'+lista.map(function(v){return '<option value="'+esc(v)+'"'+(v===sel?' selected':'')+'>'+esc(v)+'</option>';}).join(''); }
+function poblarFiltros(){
+  var it=itemsAct();
+  function fill(id,vals,pre){ var s=$(id), c=s.value; s.innerHTML='<option value="">'+pre+'</option>'+vals.map(function(v){return '<option value="'+esc(v)+'">'+esc(v)+'</option>';}).join(''); if(vals.indexOf(c)>=0||c==='__none') s.value=c; }
+  fill('f-piso',uniq(it.map(function(i){return i.piso;})).sort(ordenar),'Todos');
+  fill('f-ola',uniq(it.map(function(i){return i.wave;})).sort(ordenar),'Todas');
+  fill('f-dpto',CONFIG.dptos,'Todos'); $('f-dpto').insertAdjacentHTML('beforeend','<option value="__none">('+SIN_D+')</option>');
+  fill('f-just',CONFIG.justs,'Todas'); $('f-just').insertAdjacentHTML('beforeend','<option value="__none">('+SIN_J+')</option>');
+  $('m-dpto').innerHTML=opts(CONFIG.dptos,'','Dpto. responsable…'); $('m-just').innerHTML=opts(CONFIG.justs,'','Justificación…');
+}
+function filtrados(){
+  var it=itemsAct(), fp=$('f-piso').value, fo=$('f-ola').value, fd=$('f-dpto').value, fj=$('f-just').value, fe=$('f-est').value, q=$('f-q').value.trim().toLowerCase();
+  return it.filter(function(i){
+    if(fp&&i.piso!==fp) return false; if(fo&&i.wave!==fo) return false;
+    if(fd==='__none'&&i.dpto) return false; if(fd&&fd!=='__none'&&i.dpto!==fd) return false;
+    if(fj==='__none'&&i.just) return false; if(fj&&fj!=='__none'&&i.just!==fj) return false;
+    if(fe==='pend'&&gest(i)) return false; if(fe==='ok'&&!gest(i)) return false; if(fe==='sug'&&!i.sug) return false;
+    if(fe==='nota'&&!i.nota) return false; if(fe==='sinnota'&&i.nota) return false;
+    if(q&&(i.desc||'').toLowerCase().indexOf(q)<0&&i.id.indexOf(q)<0&&(i.nota||'').toLowerCase().indexOf(q)<0) return false;
+    return true;
+  });
+}
+function renderDetalle(){
+  var it=itemsAct();
+  $('det-titulo').textContent='Detalle por ítem · '+(activa?fl(activa):'');
+  if(!it.length){ $('tbl-det').innerHTML='<tbody><tr><td style="padding:20px;color:#889">Sin jornada.</td></tr></tbody>'; $('kpis-det').innerHTML=''; $('rec-count').textContent=''; return; }
+  var f=filtrados(), tu=sum(it,function(i){return i.qty;}), g=it.filter(gest), pend=it.length-g.length;
+  $('kpis-det').innerHTML= kpi(nf(it.length),'Registros','', nf(tu)+' unidades')+
+    kpi(pct(g.length,it.length)+'%','Gestionados', g.length===it.length?'good':'', g.length+' de '+it.length)+
+    kpi(nf(pend),'Pendientes', pend?'alert':'good', nf(sum(it.filter(function(i){return !gest(i);}),function(i){return i.qty;}))+' u. sin causa')+
+    kpi(nf(it.filter(function(i){return i.sug;}).length),'Sugeridos ↺','', 'por revisar');
+  var h='<thead><tr><th>Ítem</th><th style="text-align:left">Descripción</th><th>Ola</th><th>Unidades</th><th>Clase ajuste</th><th>Piso</th><th>Ubic. despacho</th><th>Dpto. responsable</th><th>Justificación</th><th style="text-align:left;min-width:220px">Nota / reseña</th></tr></thead><tbody>';
+  f.forEach(function(i){ var ix=it.indexOf(i);
+    h+='<tr><td style="font-family:monospace">'+esc(i.id)+'</td><td class="desc" title="'+esc(i.desc)+'">'+esc(i.desc)+'</td><td>'+esc(i.wave)+'</td><td><b>'+nf(i.qty)+'</b></td>'+
+      '<td><span class="pill n">'+esc(i.clase||'—')+'</span></td><td><span class="pill b">'+esc(i.piso)+'</span></td><td style="font-size:11.5px">'+esc(i.ubic||i.zona||'—')+'</td>'+
+      '<td><select class="sel-in'+(i.dpto?'':' vacio')+'" onchange="asignar('+ix+',\'dpto\',this.value)">'+opts(CONFIG.dptos.concat(i.dpto&&CONFIG.dptos.indexOf(i.dpto)<0?[i.dpto]:[]),i.dpto)+OPT_ADD+'</select>'+(i.sug?'<span class="sug" title="Sugerido del histórico">↺</span>':'')+'</td>'+
+      '<td><select class="sel-in'+(i.just?'':' vacio')+'" onchange="asignar('+ix+',\'just\',this.value)">'+opts(CONFIG.justs.concat(i.just&&CONFIG.justs.indexOf(i.just)<0?[i.just]:[]),i.just)+OPT_ADD+'</select></td>'+
+      '<td><input type="text" class="nota-in" maxlength="300" placeholder="Escribe una nota…" value="'+esc(i.nota||'')+'" title="'+esc(i.nota||'')+'" oninput="setNota('+ix+',this.value)"></td></tr>';
+  });
+  if(!f.length) h+='<tr><td colspan="10" style="padding:18px;color:#889">Sin resultados.</td></tr>';
+  $('tbl-det').innerHTML=h+'</tbody>';
+  $('rec-count').textContent='Mostrando '+f.length+' de '+it.length+' registros';
+}
+var OPT_ADD='<option value="__add__" style="color:#00A499;font-weight:700">＋ Agregar nuevo…</option>';
+function agregarOpcion(tipo){
+  var nom= tipo==='dptos'?'Dpto. responsable':'Justificación';
+  var v=prompt('Nuevo '+nom+':'); if(!v) return null; v=v.trim().replace(/\s+/g,' ').toUpperCase(); if(!v) return null;
+  if(CONFIG[tipo].indexOf(v)<0){ CONFIG[tipo].push(v); persistConfig(); }
+  return v;
+}
+function nuevaOpcionUI(tipo){ var v=agregarOpcion(tipo); if(v){ poblarFiltros(); renderDetalle(); alert('✓ "'+v+'" agregado a la lista y sincronizado con el equipo.'); } }
+var _tn=null;
+function setNota(ix,val){ var it=itemsAct(), base=it[ix]; if(!base) return;
+  it.forEach(function(i){ if(i.id===base.id) i.nota=val; }); guardarActiva(); }
+function asignar(ix, campo, val){
+  var it=itemsAct(), base=it[ix]; if(!base) return;
+  if(val==='__add__'){ val=agregarOpcion(campo==='dpto'?'dptos':'justs'); if(!val){ renderDetalle(); return; } poblarFiltros(); }
+  it.forEach(function(i){ if(i.id===base.id){ i[campo]=val; i.sug=false; } });  // aplica a todas las olas del ítem
+  guardarActiva(); renderDetalle();
+}
+function asignarMasivo(){
+  var d=$('m-dpto').value, j=$('m-just').value; if(!d&&!j){ alert('Elige Dpto. y/o Justificación.'); return; }
+  var f=filtrados(); if(!confirm('Asignar a '+f.length+' registros filtrados?')) return;
+  f.forEach(function(i){ if(d) i.dpto=d; if(j) i.just=j; i.sug=false; }); guardarActiva(); renderDetalle();
+}
+function aceptarSugerencias(){ var f=filtrados().filter(function(i){return i.sug;}); f.forEach(function(i){i.sug=false;}); guardarActiva(); renderDetalle(); }
+
+/* ═══════════════ ANÁLISIS JORNADA ═══════════════ */
+function agrupar(items, keyFn){ var m={}; items.forEach(function(i){ var k=keyFn(i); m[k]=(m[k]||0)+i.qty; });
+  return Object.keys(m).map(function(k){return {k:k,v:m[k]};}).sort(function(a,b){return b.v-a.v;}); }
+function barH(id, arr, color, max){
+  destruir(id); var a=arr.slice(0,max||15);
+  charts[id]=new Chart($(id),{type:'bar',data:{labels:a.map(function(x){return x.k.length>34?x.k.slice(0,34)+'…':x.k;}),
+    datasets:[{label:'Unidades',data:a.map(function(x){return x.v;}),backgroundColor:a.map(function(x){return (x.k===SIN_D||x.k===SIN_J)?'#C9D1DE':(color||FTD.azul1);}),borderRadius:4,maxBarThickness:28}]},
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{backgroundColor:FTD.azul1}},
+      scales:{x:{beginAtZero:true,grid:{color:FTD.rejilla},ticks:{callback:function(v){return nf(v);}}},y:{grid:{display:false},ticks:{font:{size:11}}}}}});
+}
+function barV(id, labels, data, color){
+  destruir(id);
+  charts[id]=new Chart($(id),{type:'bar',data:{labels:labels,datasets:[{label:'Unidades',data:data,backgroundColor:color||FTD.azul1,borderRadius:4,maxBarThickness:40}]},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{display:false},tooltip:{backgroundColor:FTD.azul1}},
+      scales:{x:{grid:{display:false}},y:{beginAtZero:true,grid:{color:FTD.rejilla},ticks:{callback:function(v){return nf(v);}}}}}});
+}
+function renderAnalisis(){
+  var it=itemsAct(); $('an-titulo').textContent='Análisis de la jornada · '+(activa?fl(activa):'');
+  if(!it.length){ $('kpis-an').innerHTML='<p class="hint">Sin jornada.</p>'; return; }
+  var tu=sum(it,function(i){return i.qty;}), pisos=agrupar(it,function(i){return i.piso;}), dptos=agrupar(it,function(i){return i.dpto||SIN_D;}),
+      justs=agrupar(it,function(i){return i.just||SIN_J;}), g=it.filter(gest).length;
+  var dTop=dptos.filter(function(x){return x.k!==SIN_D;})[0], jTop=justs.filter(function(x){return x.k!==SIN_J;})[0];
+  $('kpis-an').innerHTML= kpi(nf(tu),'Unidades canceladas')+kpi(nf(uniq(it.map(function(i){return i.id;})).length),'Ítems únicos')+
+    kpi(pisos.length,'Pisos afectados','', 'Piso crítico: '+pisos[0].k+' ('+pct(pisos[0].v,tu)+'%)')+
+    kpi(pct(g,it.length)+'%','Gestionados', g===it.length?'good':'alert', g+' de '+it.length)+
+    kpi(dTop?esc(dTop.k):'—','Dpto. que más impacta','alert', dTop? nf(dTop.v)+' u. · '+pct(dTop.v,tu)+'%':'',true)+
+    kpi(jTop?esc(jTop.k):'—','Causa principal','alert', jTop? nf(jTop.v)+' u. · '+pct(jTop.v,tu)+'%':'',true);
+  var ps=pisos.slice().sort(function(a,b){return ordenar(a.k,b.k);});
+  barV('c-piso', ps.map(function(x){return x.k;}), ps.map(function(x){return x.v;}), FTD.azul1);
+  var ol=agrupar(it,function(i){return i.wave;}).sort(function(a,b){return ordenar(a.k,b.k);});
+  barV('c-ola', ol.map(function(x){return 'Ola '+x.k;}), ol.map(function(x){return x.v;}), FTD.azul2);
+  barH('c-dpto', dptos, FTD.azul1); barH('c-just', justs, '#470A68');
+  // Matriz Dpto × Justificación
+  var D=dptos.map(function(x){return x.k;}), J=justs.map(function(x){return x.k;}), m={};
+  it.forEach(function(i){ var k=(i.dpto||SIN_D)+'||'+(i.just||SIN_J); m[k]=(m[k]||0)+i.qty; });
+  var mx=0; Object.keys(m).forEach(function(k){ if(m[k]>mx) mx=m[k]; });
+  var h='<thead><tr><th style="text-align:left">Dpto \\ Justificación</th>'+J.map(function(j){return '<th style="white-space:normal;min-width:90px;font-size:11px">'+esc(j)+'</th>';}).join('')+'<th>Total</th></tr></thead><tbody>';
+  dptos.forEach(function(d){ h+='<tr><td class="lbl">'+esc(d.k)+'</td>';
+    J.forEach(function(j){ var v=m[d.k+'||'+j]||0; var op=mx?(0.1+0.9*v/mx):0;
+      h+= v? '<td style="background:rgba(200,16,46,'+op.toFixed(2)+');color:'+(op>.5?'#fff':'#1b2436')+';font-weight:700">'+nf(v)+'</td>':'<td class="zero">—</td>'; });
+    h+='<td class="tt">'+nf(d.v)+'</td></tr>'; });
+  $('tbl-matriz').innerHTML=h+'</tbody>';
+  // Top 10 ítems (sumando olas)
+  var byI={}; it.forEach(function(i){ if(!byI[i.id]) byI[i.id]={id:i.id,desc:i.desc,piso:i.piso,v:0,olas:0,dpto:i.dpto,just:i.just}; byI[i.id].v+=i.qty; byI[i.id].olas++; });
+  var top=Object.keys(byI).map(function(k){return byI[k];}).sort(function(a,b){return b.v-a.v;}).slice(0,10), mt=top.length?top[0].v:1;
+  $('tbl-top10').innerHTML='<thead><tr><th>#</th><th>Ítem</th><th style="text-align:left">Descripción</th><th>Piso</th><th>Olas</th><th>Unid.</th><th style="text-align:left">Causa</th></tr></thead><tbody>'+
+    top.map(function(t,n){ return '<tr><td><b>'+(n+1)+'</b></td><td style="font-family:monospace">'+t.id+'</td><td class="desc" title="'+esc(t.desc)+'">'+esc(t.desc)+'</td><td><span class="pill b">'+esc(t.piso)+'</span></td><td>'+t.olas+'</td><td><span class="bar-in" style="width:'+Math.round(t.v/mt*60)+'px"></span><b>'+nf(t.v)+'</b></td><td class="l" style="font-size:11px">'+(t.just?esc(t.just):'<span class="pill r">pendiente</span>')+'</td></tr>'; }).join('')+'</tbody>';
+  var nts={}; it.forEach(function(i){ if(!i.nota) return; if(!nts[i.id]) nts[i.id]={id:i.id,desc:i.desc,piso:i.piso,v:0,dpto:i.dpto,just:i.just,nota:i.nota}; nts[i.id].v+=i.qty; });
+  var na=Object.keys(nts).map(function(k){return nts[k];}).sort(function(a,b){return b.v-a.v;});
+  $('tbl-notas').innerHTML= na.length? '<thead><tr><th>Ítem</th><th style="text-align:left">Descripción</th><th>Piso</th><th>Unid.</th><th style="text-align:left">Dpto.</th><th style="text-align:left">Justificación</th><th style="text-align:left">Nota</th></tr></thead><tbody>'+
+    na.map(function(t){ return '<tr><td style="font-family:monospace">'+t.id+'</td><td class="desc">'+esc(t.desc)+'</td><td><span class="pill b">'+esc(t.piso)+'</span></td><td><b>'+nf(t.v)+'</b></td><td class="l" style="font-size:11.5px">'+esc(t.dpto||'—')+'</td><td class="l" style="font-size:11.5px">'+esc(t.just||'—')+'</td><td class="l" style="white-space:normal;min-width:260px">'+esc(t.nota)+'</td></tr>'; }).join('')+'</tbody>'
+    : '<tbody><tr><td style="padding:14px;color:#889">Aún no hay notas en esta jornada.</td></tr></tbody>';
+  var ub=agrupar(it,function(i){return i.ubic||i.zona||'(sin dato)';}).slice(0,15);
+  $('tbl-ubic').innerHTML='<thead><tr><th style="text-align:left">Ubicación / Zona</th><th>Unid.</th><th>%</th></tr></thead><tbody>'+
+    ub.map(function(x){return '<tr><td class="l">'+esc(x.k)+'</td><td><b>'+nf(x.v)+'</b></td><td>'+pct(x.v,tu)+'%</td></tr>';}).join('')+'</tbody>';
+}
+
+/* ═══════════════ GERENCIAL ═══════════════ */
+function setPeriodo(p){ periodo=p; document.querySelectorAll('#seg-p button').forEach(function(b){b.classList.toggle('active',b.dataset.p===p);}); renderGerencial(); }
+function claveP(f){ return periodo==='D'?f:periodo==='S'?semanaISO(f):f.slice(0,7); }
+function etiqP(k){ if(periodo==='M'){ var p=k.split('-'); return MESES[+p[1]-1]+' '+p[0].slice(2); } if(periodo==='S') return k.slice(5)+' '+k.slice(2,4); return k.slice(8)+'/'+k.slice(5,7); }
+function eventosSingulares(fechas){
+  // Causa (justificación) con ≥75% de sus unidades en una sola jornada y peso ≥ 3% del total del rango
+  var porC={}, tot=0;
+  fechas.forEach(function(f){ (GS[f].items||[]).forEach(function(i){ var c=i.just||SIN_J; tot+=i.qty;
+    if(!porC[c]) porC[c]={t:0,d:{}}; porC[c].t+=i.qty; porC[c].d[f]=(porC[c].d[f]||0)+i.qty; }); });
+  var out=[];
+  Object.keys(porC).forEach(function(c){ if(c===SIN_J) return; var o=porC[c], best=null;
+    Object.keys(o.d).forEach(function(f){ if(!best||o.d[f]>o.d[best]) best=f; });
+    var share=o.d[best]/o.t; if(share>=0.75 && o.t>=tot*0.03 && Object.keys(o.d).length>1 || (share>=0.75 && o.t>=tot*0.08))
+      out.push({causa:c,fecha:best,uDia:o.d[best],total:o.t,pct:Math.round(share*1000)/10}); });
+  return out.sort(function(a,b){return b.uDia-a.uDia;});
+}
+var GS={};
+function fuenteGerencial(){
+  var src={}; Object.keys(JORNADAS).forEach(function(f){ src[f]=JORNADAS[f]; });
+  if(BORRADOR&&BORRADOR.items&&BORRADOR.items.length){ var f=($('fecha-jornada')&&$('fecha-jornada').value)||hoyISO(); src[f]={fecha:f,items:BORRADOR.items,enCurso:true}; }
+  return src;
+}
+function renderGerencial(){
+  GS=fuenteGerencial();
+  var fechasAll=Object.keys(GS).sort();
+  var anios=uniq(fechasAll.map(function(f){return f.slice(0,4);})), sa=$('g-anio'), ca=sa.value;
+  sa.innerHTML='<option value="">Todos</option>'+anios.map(function(a){return '<option>'+a+'</option>';}).join('');
+  if(ca&&anios.indexOf(ca)>=0) sa.value=ca; else if(!ca&&anios.length) sa.value=anios[anios.length-1];
+  var meses=uniq(fechasAll.filter(function(f){return !sa.value||f.slice(0,4)===sa.value;}).map(function(f){return f.slice(5,7);})), sm=$('g-mes'), cm=sm.value;
+  sm.innerHTML='<option value="">Todos</option>'+meses.map(function(m){return '<option value="'+m+'">'+MESES_L[+m-1]+'</option>';}).join('');
+  if(meses.indexOf(cm)>=0) sm.value=cm;
+  var fechas=fechasAll.filter(function(f){ return (!sa.value||f.slice(0,4)===sa.value)&&(!sm.value||f.slice(5,7)===sm.value); });
+  ['g-tend','g-dpto-p','g-just-p','g-par-just','g-par-dpto','g-par-piso','g-gest'].forEach(destruir);
+  if(!fechas.length){ $('kpis-ger').innerHTML=kpi('0','Sin jornadas en el rango'); $('g-items').innerHTML=''; $('g-excl-box').innerHTML=''; return; }
+  // Eventos singulares
+  var exc=eventosSingulares(fechas), excluir=$('g-excl').checked, excSet={};
+  exc.forEach(function(e){ excSet[e.causa+'|'+e.fecha]=true; });
+  $('g-excl-box').innerHTML= exc.length? '<div class="msg warn" style="font-weight:500"><b>⚠ Eventos singulares de alto impacto</b> (≥75% de las unidades de esa causa en una sola jornada) — '+(excluir?'<b>excluidos</b> de los gráficos':'incluidos en los gráficos')+':<br>'+
+    exc.map(function(e){return '• <b>'+esc(e.causa)+'</b> el '+fl(e.fecha)+': '+nf(e.uDia)+' u. ('+e.pct+'% de '+nf(e.total)+')';}).join('<br>')+'</div>' : '';
+  var rec=[]; // registros planos
+  fechas.forEach(function(f){ (GS[f].items||[]).forEach(function(i){
+    if(excluir && excSet[(i.just||SIN_J)+'|'+f]) return; rec.push({f:f,p:claveP(f),i:i}); }); });
+  var tu=sum(rec,function(r){return r.i.qty;}), pers=uniq(rec.map(function(r){return r.p;})).sort();
+  var dAll=agrupar(rec.map(function(r){return r.i;}),function(i){return i.dpto||SIN_D;}), jAll=agrupar(rec.map(function(r){return r.i;}),function(i){return i.just||SIN_J;});
+  var g=rec.filter(function(r){return gest(r.i);}).length;
+  var dT=dAll.filter(function(x){return x.k!==SIN_D;})[0], jT=jAll.filter(function(x){return x.k!==SIN_J;})[0];
+  var enC=fechas.filter(function(f){return GS[f].enCurso;});
+  $('g-sub').textContent=fechas.length+' jornadas · '+fl(fechas[0])+' → '+fl(fechas[fechas.length-1])+(enC.length?' · incluye jornada en curso ('+fl(enC[0])+')':'')+' · se actualiza al justificar en Detalle';
+  $('kpis-ger').innerHTML= kpi(nf(tu),'Unidades canceladas')+kpi(fechas.length,'Jornadas','', 'Prom. '+nf(Math.round(tu/fechas.length))+' u./jornada')+
+    kpi(pct(g,rec.length)+'%','Registros gestionados', pct(g,rec.length)>=90?'good':'alert', nf(rec.length-g)+' sin causa asignada')+
+    kpi(dT?esc(dT.k):'—','Dpto. que más impacta','alert', dT?nf(dT.v)+' u. · '+pct(dT.v,tu)+'%':'',true)+
+    kpi(jT?esc(jT.k):'—','Causa raíz principal','alert', jT?nf(jT.v)+' u. · '+pct(jT.v,tu)+'%':'',true);
+  // Tendencia: barras unidades + línea promedio móvil
+  var pT={}, pG={}, pN={}; pers.forEach(function(p){pT[p]=0;pG[p]=0;pN[p]=0;});
+  rec.forEach(function(r){ pT[r.p]+=r.i.qty; pN[r.p]++; if(gest(r.i)) pG[r.p]++; });
+  var serie=pers.map(function(p){return pT[p];}), mm=serie.map(function(v,ix){ var s=serie.slice(Math.max(0,ix-2),ix+1); return Math.round(sum(s)/s.length); });
+  $('t-tend').textContent='Unidades canceladas por '+(periodo==='D'?'día':periodo==='S'?'semana':'mes');
+  charts['g-tend']=new Chart($('g-tend'),{data:{labels:pers.map(etiqP),datasets:[
+      {type:'bar',label:'Unidades',data:serie,backgroundColor:FTD.azul2,borderRadius:4,maxBarThickness:46,order:2},
+      {type:'line',label:'Promedio móvil (3)',data:mm,borderColor:FTD.azul1,borderWidth:2.5,pointRadius:0,tension:.3,cubicInterpolationMode:'monotone',order:1}]},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{position:'bottom',labels:{usePointStyle:true,boxWidth:10}},tooltip:{backgroundColor:FTD.azul1}},
+      scales:{x:{grid:{display:false}},y:{beginAtZero:true,grid:{color:FTD.rejilla},ticks:{callback:function(v){return nf(v);}}}}}});
+  // Apilados por período
+  function apilado(id, tops, keyFn, sinK){
+    var top=tops.filter(function(x){return x.k!==sinK;}).slice(0,8).map(function(x){return x.k;});
+    var cats=top.concat(['Otros',sinK]);
+    var m={}; cats.forEach(function(c){ m[c]={}; });
+    rec.forEach(function(r){ var k=keyFn(r.i); var c= k===sinK?sinK:(top.indexOf(k)>=0?k:'Otros'); m[c][r.p]=(m[c][r.p]||0)+r.i.qty; });
+    var ds=cats.filter(function(c){ return pers.some(function(p){return m[c][p];}); }).map(function(c,ix){
+      return {label:c,data:pers.map(function(p){return m[c][p]||0;}),backgroundColor:c===sinK?'#E5E9F0':c==='Otros'?'#9AA6B8':FTD.series[ix%FTD.series.length],borderRadius:2,maxBarThickness:52}; });
+    charts[id]=new Chart($(id),{type:'bar',data:{labels:pers.map(etiqP),datasets:ds},
+      options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{position:'bottom',labels:{usePointStyle:true,pointStyle:'circle',boxWidth:9,padding:12,font:{size:11}}},
+        tooltip:{backgroundColor:FTD.azul1,mode:'index',intersect:false,callbacks:{footer:function(it){ return 'Total: '+nf(sum(it,function(x){return x.parsed.y;})); }}}},
+        scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,beginAtZero:true,grid:{color:FTD.rejilla},ticks:{callback:function(v){return nf(v);}}}}}});
+  }
+  apilado('g-dpto-p', dAll, function(i){return i.dpto||SIN_D;}, SIN_D);
+  apilado('g-just-p', jAll, function(i){return i.just||SIN_J;}, SIN_J);
+  // Paretos
+  function pareto(id, arr, color){
+    var a=arr.slice(0,12), tot=sum(arr,function(x){return x.v;}), acc=0, cum=a.map(function(x){acc+=x.v; return Math.round(acc/tot*1000)/10;});
+    charts[id]=new Chart($(id),{data:{labels:a.map(function(x){return x.k.length>22?x.k.slice(0,22)+'…':x.k;}),datasets:[
+        {type:'bar',label:'Unidades',data:a.map(function(x){return x.v;}),backgroundColor:a.map(function(x){return (x.k===SIN_D||x.k===SIN_J)?'#C9D1DE':color;}),borderRadius:4,yAxisID:'y',order:2},
+        {type:'line',label:'% acumulado',data:cum,borderColor:FTD.rojo,borderWidth:2,pointRadius:3,tension:0,yAxisID:'y1',order:1}]},
+      options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{position:'bottom',labels:{usePointStyle:true,boxWidth:9}},tooltip:{backgroundColor:FTD.azul1}},
+        scales:{x:{grid:{display:false},ticks:{maxRotation:55,minRotation:35,font:{size:10.5}}},y:{beginAtZero:true,grid:{color:FTD.rejilla},ticks:{callback:function(v){return nf(v);}}},
+          y1:{position:'right',min:0,max:100,grid:{display:false},ticks:{callback:function(v){return v+'%';}}}}}});
+  }
+  pareto('g-par-just', jAll, '#470A68'); pareto('g-par-dpto', dAll, FTD.azul1);
+  pareto('g-par-piso', agrupar(rec.map(function(r){return r.i;}),function(i){return i.piso;}), FTD.azul2);
+  charts['g-gest']=new Chart($('g-gest'),{type:'line',data:{labels:pers.map(etiqP),datasets:[{label:'% gestionado',data:pers.map(function(p){return pct(pG[p],pN[p]);}),
+      borderColor:'#00A499',backgroundColor:'rgba(0,164,153,.12)',fill:true,borderWidth:2.5,pointRadius:3,tension:.3,cubicInterpolationMode:'monotone'},
+      {label:'Meta 100%',data:pers.map(function(){return 100;}),borderColor:FTD.azul1,borderDash:[5,4],borderWidth:1.5,pointRadius:0,tension:0}]},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{position:'bottom',labels:{usePointStyle:true,boxWidth:9}},tooltip:{backgroundColor:FTD.azul1}},
+      scales:{x:{grid:{display:false}},y:{min:0,max:105,grid:{color:FTD.rejilla},ticks:{callback:function(v){return v+'%';}}}}}});
+  // Ítems reincidentes
+  var I={}; rec.forEach(function(r){ var i=r.i; if(!I[i.id]) I[i.id]={id:i.id,desc:i.desc,piso:i.piso,v:0,dias:{},d:{},j:{},nota:''};
+    if(i.nota) I[i.id].nota=i.nota;
+    var o=I[i.id]; o.v+=i.qty; o.dias[r.f]=1; if(i.dpto) o.d[i.dpto]=(o.d[i.dpto]||0)+i.qty; if(i.just) o.j[i.just]=(o.j[i.just]||0)+i.qty; });
+  function topK(o){ var k=Object.keys(o).sort(function(a,b){return o[b]-o[a];}); return k[0]||''; }
+  var arrI=Object.keys(I).map(function(k){return I[k];}).sort(function(a,b){return b.v-a.v;}).slice(0,50), mx=arrI.length?arrI[0].v:1;
+  $('g-items').innerHTML='<thead><tr><th>#</th><th>Ítem</th><th style="text-align:left">Descripción</th><th>Piso</th><th>Jornadas</th><th>Unidades</th><th>%</th><th style="text-align:left">Dpto. principal</th><th style="text-align:left">Causa principal</th><th style="text-align:left">Última nota</th></tr></thead><tbody>'+
+    arrI.map(function(t,n){ var nd=Object.keys(t.dias).length;
+      return '<tr><td><b>'+(n+1)+'</b></td><td style="font-family:monospace">'+t.id+'</td><td class="desc" title="'+esc(t.desc)+'">'+esc(t.desc)+'</td><td><span class="pill b">'+esc(t.piso)+'</span></td>'+
+      '<td><span class="pill '+(nd>=5?'r':nd>=3?'n':'g')+'">'+nd+'</span></td><td><span class="bar-in" style="width:'+Math.round(t.v/mx*70)+'px"></span><b>'+nf(t.v)+'</b></td><td>'+pct(t.v,tu)+'%</td>'+
+      '<td class="l" style="font-size:11.5px">'+esc(topK(t.d)||'—')+'</td><td class="l" style="font-size:11.5px">'+esc(topK(t.j)||'—')+'</td><td class="l" style="font-size:11.5px;white-space:normal;min-width:180px">'+esc(t.nota||'')+'</td></tr>'; }).join('')+'</tbody>';
+}
+
+/* ═══════════════ HISTORIAL ═══════════════ */
+function renderHistorial(){
+  var fs=Object.keys(JORNADAS).sort().reverse();
+  var meses=uniq(fs.map(function(f){return f.slice(0,7);})), sm=$('h-mes'), c=sm.value;
+  sm.innerHTML='<option value="">Todos</option>'+meses.map(function(m){return '<option value="'+m+'">'+MESES_L[+m.slice(5)-1]+' '+m.slice(0,4)+'</option>';}).join(''); if(meses.indexOf(c)>=0) sm.value=c;
+  var lista=fs.filter(function(f){return !sm.value||f.slice(0,7)===sm.value;});
+  $('h-sub').textContent=fs.length+' jornada(s) guardada(s)'+(BORRADOR?' · 1 borrador sin cerrar':'');
+  if(!fs.length){ $('h-list').innerHTML='<p class="hint">Aún no hay jornadas. Importa la migración o cierra una jornada.</p>'; return; }
+  $('h-list').innerHTML=lista.map(function(f){ var it=JORNADAS[f].items||[], u=sum(it,function(i){return i.qty;}), g=it.filter(gest).length;
+    return '<div class="hist-row'+(f===activa?' act':'')+'"><div class="f">'+fl(f)+'</div><div class="m"><b>'+nf(it.length)+'</b> registros · <b>'+nf(u)+'</b> unidades · '+
+      '<span class="pill '+(g===it.length?'g':'n')+'">'+g+'/'+it.length+' gestionados</span><br><span style="font-size:11px;color:#889">Guardado: '+esc(JORNADAS[f].savedAt||'—')+'</span></div>'+
+      '<button class="btn sm sec" onclick="abrirJornada(\''+f+'\')">Abrir</button><button class="btn sm danger" onclick="eliminarJornada(\''+f+'\')">Eliminar</button></div>'; }).join('');
+}
+function abrirJornada(f){ activa=f; refrescar(); ir('pisoola'); }
+async function eliminarJornada(f){
+  if(!confirm('¿Eliminar la jornada '+fl(f)+'? No se puede deshacer.')) return;
+  delete JORNADAS[f]; if(activa===f) activa=null;
+  if(window.FB_ON&&window.fbDelete) await window.fbDelete('canc_jornadas',f);
+  persistLocal(); refrescar();
+}
+async function cargarJornadasMasivo(nuevas, etiqueta){
+  var ks=Object.keys(nuevas).sort(); if(!ks.length){ alert('No se encontraron jornadas válidas.'); return; }
+  var existentes=ks.filter(function(k){return JORNADAS[k];}).length;
+  if(!confirm('Se importarán '+ks.length+' jornadas ('+fl(ks[0])+' → '+fl(ks[ks.length-1])+').'+(existentes?'\n'+existentes+' ya existen y se sobrescribirán.':'')+'\n¿Continuar?')) return;
+  ks.forEach(function(k){ JORNADAS[k]=nuevas[k]; }); persistLocal();
+  if(window.FB_ON&&window.fbSave){
+    $('imp-prog').innerHTML='<div class="msg info">Subiendo a la nube… <span id="imp-n">0</span>/'+ks.length+'<div class="progress"><div id="imp-bar"></div></div></div>';
+    for(var n=0;n<ks.length;n++){ await window.fbSave('canc_jornadas',ks[n],nuevas[ks[n]]); $('imp-n').textContent=n+1; $('imp-bar').style.width=Math.round((n+1)/ks.length*100)+'%'; }
+  }
+  $('imp-prog').innerHTML='<div class="msg ok">✓ '+etiqueta+': '+ks.length+' jornadas importadas'+(window.FB_ON?' y sincronizadas':' (local)')+'.</div>';
+  refrescar();
+}
+function importarJSON(file){
+  var r=new FileReader(); r.onload=function(e){ try{ var d=JSON.parse(e.target.result), jor=d.jornadas||d, out={};
+    Object.keys(jor).forEach(function(k){ if(jor[k]&&jor[k].items&&/^\d{4}-\d{2}-\d{2}$/.test(k)) out[k]=jor[k]; });
+    if(d.config&&d.config.dptos){ CONFIG=d.config; persistConfig(); }
+    cargarJornadasMasivo(out,'Respaldo JSON'); }catch(err){ alert('Archivo no válido: '+err.message); } }; r.readAsText(file);
+}
+// Importa la hoja "Historial" de Google Sheets (FECHA, ITEM_ID, DESCRIPCION, OLA, UNIDADES, PISO, DPTO_RESPONSABLE, JUSTIFICACION, TIMESTAMP_CIERRE)
+function importarExcelHistorial(file){
+  var r=new FileReader(); r.onload=function(e){ try{
+    var wb=XLSX.read(e.target.result,{type:'array',cellDates:true});
+    var nom=wb.SheetNames.indexOf('Historial')>=0?'Historial':wb.SheetNames[0];
+    var rows=XLSX.utils.sheet_to_json(wb.Sheets[nom],{header:1,defval:null,raw:true});
+    var hi=findHeader(rows,[['fecha'],['item']]); if(hi<0){ alert('No encontré encabezados FECHA / ITEM_ID.'); return; }
+    var h=rows[hi].map(function(v){return String(v||'').toUpperCase().trim();});
+    function c(n){ return h.indexOf(n); }
+    var cF=c('FECHA'),cI=c('ITEM_ID'),cD=c('DESCRIPCION'),cO=c('OLA'),cU=c('UNIDADES'),cP=c('PISO'),cR=c('DPTO_RESPONSABLE'),cJ=c('JUSTIFICACION'),cT=c('TIMESTAMP_CIERRE');
+    var out={};
+    rows.slice(hi+1).forEach(function(r){ if(!r||r[cI]==null) return; var fv=r[cF], iso='';
+      if(fv instanceof Date) iso=fv.getFullYear()+'-'+String(fv.getMonth()+1).padStart(2,'0')+'-'+String(fv.getDate()).padStart(2,'0');
+      else { var m=String(fv||'').match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/); if(m) iso=m[3]+'-'+m[2].padStart(2,'0')+'-'+m[1].padStart(2,'0'); }
+      if(!iso) return;
+      if(!out[iso]) out[iso]={fecha:iso,dateLabel:fl(iso),savedAt:cT>=0?String(r[cT]||''):'',origen:'excel_historial',items:[]};
+      out[iso].items.push({id:norm(r[cI]),desc:norm(r[cD]),wave:norm(r[cO]),qty:num(r[cU]),clase:'',piso:norm(r[cP])||'?',zona:'',ubic:'',dpto:norm(r[cR]),just:norm(r[cJ])}); });
+    cargarJornadasMasivo(out,'Hoja Historial');
+  }catch(err){ alert('No se pudo leer: '+err.message); } }; r.readAsArrayBuffer(file);
+}
+function exportarRespaldo(){ descargar(new Blob([JSON.stringify({version:2,config:CONFIG,jornadas:JORNADAS})],{type:'application/json'}),'cancelaciones_respaldo_'+hoyISO()+'.json'); }
+
+/* ═══════════════ EXPORTACIONES ═══════════════ */
+function descargar(blob,nombre){ var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=nombre; document.body.appendChild(a); a.click(); setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},1500); }
+function exportTablaImagen(tblId, titulo, archivo, sub){
+  var orig=$(tblId); if(!orig||!orig.innerHTML){ alert('Sin datos'); return; }
+  var ahora=new Date(), w=document.createElement('div');
+  w.style.cssText='position:fixed;left:-9999px;top:0;background:#fff;padding:20px;font-family:Helvetica,Arial,sans-serif;display:inline-block;min-width:480px';
+  w.innerHTML='<div style="background:#001E62;color:#fff;padding:14px 18px;display:flex;align-items:center;gap:14px;border-radius:10px 10px 0 0">'+
+    '<div style="height:30px">'+document.querySelector('.hdr .logo').innerHTML.replace('<svg','<svg style="height:30px;width:auto"')+'</div>'+
+    '<div style="flex:1"><div style="font-size:17px;font-weight:800">'+titulo+'</div><div style="font-size:12px;opacity:.8">'+esc(sub||('Jornada '+fl(activa)))+' · Unidades canceladas · CENDIS Charallave</div></div>'+
+    '<div style="text-align:right;font-size:11px;opacity:.85">Generado<br>'+ahora.toLocaleDateString('es-VE')+' '+ahora.toLocaleTimeString('es-VE',{hour:'2-digit',minute:'2-digit'})+'</div></div>';
+  var t=orig.cloneNode(true); t.style.cssText='border-collapse:collapse;width:100%;font-size:17px';
+  t.querySelectorAll('th').forEach(function(th,i){ th.style.cssText='background:#001E62;color:#fff;padding:9px 12px;font-size:17px;border:1px solid #000;position:static;text-align:'+(i===0?'left':'center'); });
+  t.querySelectorAll('td').forEach(function(td){ td.style.border='1px solid #000'; td.style.padding='7px 12px'; td.style.fontSize='17px'; td.style.maxWidth='none'; td.style.overflow='visible'; });
+  var tw=document.createElement('div'); tw.style.cssText='border:2px solid #000;border-top:0;border-radius:0 0 10px 10px;overflow:hidden'; tw.appendChild(t); w.appendChild(tw);
+  var ft=document.createElement('div'); ft.style.cssText='text-align:right;font-size:11px;color:#647188;margin-top:8px'; ft.textContent='Farmatodo · uso interno · Cancelaciones Pro'; w.appendChild(ft);
+  document.body.appendChild(w);
+  html2canvas(w,{scale:3,backgroundColor:'#fff',logging:false}).then(function(cv){ document.body.removeChild(w); cv.toBlob(function(b){ descargar(b, archivo+'_'+(activa==='__draft'?'en_curso':(activa||hoyISO()))+'.png'); }); });
+}
+function exportChartPNG(id){
+  var ch=charts[id]; if(!ch){ alert('La gráfica aún no tiene datos.'); return; }
+  var cv=ch.canvas, box=cv.closest('.chartbox'), par=box?box.parentNode:null, h3=par?par.querySelector('h3'):null;
+  var titulo=(h3&&h3.dataset.t)||id; var ger=!!cv.closest('#v-gerencial');
+  var sub= ger? $('g-sub').textContent : ('Jornada '+fl(activa));
+  var r=cv.width/cv.clientWidth||2, pad=24*r, head=74*r, foot=30*r, W=cv.width+pad*2, H=cv.height+head+pad*2+foot;
+  var o=document.createElement('canvas'); o.width=W; o.height=H; var c=o.getContext('2d');
+  c.fillStyle='#fff'; c.fillRect(0,0,W,H); c.fillStyle='#001E62'; c.fillRect(0,0,W,head);
+  var logo=new Image(), svg=document.querySelector('.hdr .logo').innerHTML;
+  logo.onload=function(){ var lh=30*r, lw=lh*651/127; c.drawImage(logo,pad,(head-lh)/2,lw,lh); fin(pad+lw+18*r); };
+  logo.onerror=function(){ fin(pad); };
+  function fin(x){
+    c.fillStyle='#fff'; c.font='bold '+(19*r)+'px Helvetica, Arial, sans-serif'; c.fillText(titulo.toUpperCase(),x,head/2-2*r);
+    c.globalAlpha=.8; c.font=(12*r)+'px Helvetica, Arial, sans-serif'; c.fillText(sub+' · CENDIS Charallave',x,head/2+17*r); c.globalAlpha=1;
+    c.drawImage(cv,pad,head+pad);
+    c.fillStyle='#647188'; c.font=(11*r)+'px Helvetica, Arial, sans-serif'; c.textAlign='right';
+    c.fillText('Farmatodo · uso interno · Cancelaciones Pro · '+new Date().toLocaleString('es-VE'),W-pad,H-12*r);
+    o.toBlob(function(b){ descargar(b, titulo.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,'_').slice(0,40)+'_'+(ger?hoyISO():(activa==='__draft'?'en_curso':(activa||hoyISO())))+'.png'); });
+  }
+  logo.src='data:image/svg+xml;base64,'+btoa(unescape(encodeURIComponent(svg)));
+}
+function botonesPNG(){
+  document.querySelectorAll('.chartbox canvas').forEach(function(cv){
+    var box=cv.closest('.chartbox'), h3=box.parentNode.querySelector('h3'); if(!h3||h3.dataset.t) return;
+    h3.dataset.t=h3.textContent.trim(); h3.classList.add('h3x');
+    var b=document.createElement('button'); b.className='btn png'; b.textContent='⬇ PNG'; b.onclick=function(){ exportChartPNG(cv.id); }; h3.appendChild(b);
+  });
+}
+function exportExcelJornada(){
+  var it=itemsAct(); if(!it.length){ alert('Sin datos'); return; }
+  var f=fl(activa), wb=XLSX.utils.book_new();
+  var det=[['FECHA_JORNADA','ITEM_ID','DESCRIPCION','OLA','UNIDADES','CLASE_AJUSTE','PISO','ZONA','UBICACION_DESPACHO','DPTO_RESPONSABLE','JUSTIFICACION','NOTA']].concat(
+    it.map(function(i){return [f,i.id,i.desc,i.wave,i.qty,i.clase||'',i.piso,i.zona||'',i.ubic||'',i.dpto||'',i.just||'',i.nota||''];}));
+  var ws=XLSX.utils.aoa_to_sheet(det); ws['!cols']=[12,12,42,7,9,12,6,10,18,22,30,40].map(function(w){return {wch:w};});
+  XLSX.utils.book_append_sheet(wb,ws,'Detalle');
+  function hoja(p,lab,conPct){ var aoa=[[lab].concat(p.waves.map(function(w){return 'Ola '+w;})).concat(['Total']).concat(conPct?['%']:[])];
+    p.rows.slice().sort(ordenar).forEach(function(r){ aoa.push([r].concat(p.waves.map(function(w){return p.g[r][w]||0;})).concat([p.rt[r]]).concat(conPct?[pct(p.rt[r],p.tot)+'%']:[])); });
+    aoa.push(['Total general'].concat(p.waves.map(function(w){return p.ct[w];})).concat([p.tot]).concat(conPct?['100%']:[])); return XLSX.utils.aoa_to_sheet(aoa); }
+  XLSX.utils.book_append_sheet(wb,hoja(pivot(it,function(i){return i.piso;}),'Piso'),'Piso x Ola');
+  XLSX.utils.book_append_sheet(wb,hoja(pivot(it,function(i){return i.dpto||SIN_D;}),'Departamento',true),'Dpto x Ola');
+  XLSX.utils.book_append_sheet(wb,hoja(pivot(it,function(i){return i.just||SIN_J;}),'Justificación',true),'Justificacion x Ola');
+  XLSX.writeFile(wb,'cancelaciones_'+(activa==='__draft'?'en_curso':(activa||hoyISO()))+'.xlsx');
+}
+
+/* ═══════════════ CATÁLOGOS ═══════════════ */
+function abrirConfig(){ $('cfg-dptos').value=CONFIG.dptos.join('\n'); $('cfg-justs').value=CONFIG.justs.join('\n'); $('modal-cfg').classList.add('open'); }
+function cerrarConfig(){ $('modal-cfg').classList.remove('open'); }
+function guardarConfig(){
+  function l(id){ return uniq($(id).value.split('\n').map(function(x){return x.trim();}).filter(Boolean)); }
+  var d=l('cfg-dptos'), j=l('cfg-justs'); if(!d.length||!j.length){ alert('Las listas no pueden quedar vacías.'); return; }
+  CONFIG={dptos:d,justs:j}; persistConfig(); cerrarConfig(); refrescar();
+}
+
+/* ═══════════════ INIT ═══════════════ */
+function wire(key, dropId, fileId, txtId, labelId){
+  function set(rows, nombre){ SRC[key]=rows&&rows.length?rows:null; $(dropId).classList.toggle('ok',!!SRC[key]);
+    $(labelId).textContent= SRC[key]? '✓ '+nombre+' · '+nf(rows.length)+' filas' : ''; checkReady(); }
+  $(fileId).addEventListener('change',function(){ var f=this.files[0]; if(f) leerArchivo(f,function(rows){ set(rows,f.name); }); this.value=''; });
+  $(txtId).addEventListener('input',function(){ set(textoAFilas(this.value),'pegado'); });
+  var d=$(dropId);
+  ['dragover','dragenter'].forEach(function(ev){ d.addEventListener(ev,function(e){e.preventDefault();d.classList.add('ok');}); });
+  d.addEventListener('dragleave',function(){ d.classList.toggle('ok',!!SRC[key]); });
+  d.addEventListener('drop',function(e){ e.preventDefault(); var f=e.dataTransfer.files[0]; if(f) leerArchivo(f,function(rows){ set(rows,f.name); }); });
+}
+window.addEventListener('DOMContentLoaded',function(){
+  try{ var j=localStorage.getItem(LS.jor); if(j) JORNADAS=JSON.parse(j)||{}; }catch(e){}
+  try{ var c=localStorage.getItem(LS.cfg); if(c) CONFIG=JSON.parse(c); }catch(e){}
+  try{ var b=localStorage.getItem(LS.draft); if(b){ BORRADOR=JSON.parse(b); activa='__draft'; } }catch(e){}
+  botonesPNG();
+  wire('r121','drop121','f121','t121','n121'); wire('r031','drop031','f031','t031','n031');
+  $('fi-json').addEventListener('change',function(){ if(this.files[0]) importarJSON(this.files[0]); this.value=''; });
+  $('fi-xls').addEventListener('change',function(){ if(this.files[0]) importarExcelHistorial(this.files[0]); this.value=''; });
+  if(BORRADOR){ $('card-cierre').hidden=false; $('fecha-jornada').value=hoyISO(); }
+  boot();
+});
+</script>
+</body>
+</html>
