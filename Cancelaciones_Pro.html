@@ -175,6 +175,16 @@ table.data td.l{text-align:left}
 .seg button.active{background:var(--azul1);color:#fff}
 .chartbox{position:relative;height:300px}.chartbox.t{height:380px}.chartbox.xt{height:440px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.thc{cursor:pointer;user-select:none;white-space:nowrap;display:flex;align-items:center;gap:4px;justify-content:center}
+.thc:hover{color:#bfe0ff}.thc .so{font-size:10px;opacity:.9}
+table.data thead th .fh{display:block;width:100%;min-width:62px;margin-top:5px;font-size:11px;padding:3px 5px;border-radius:5px;border:0;color:#123;font-weight:500;background:#fff}
+table.data thead th{vertical-align:top}
+.rc{display:inline-block;margin-left:5px;padding:1px 6px;border-radius:999px;font-size:10px;font-weight:800;background:#fff3e0;color:#a35200;cursor:help}
+.cz{display:inline-block;margin:1px 3px 1px 0;padding:1px 7px;border-radius:999px;font-size:10.5px;font-weight:700;background:#eef1f6;color:#33415c;white-space:nowrap}
+.cz.sj{background:#fdeef0;color:#9a0d22}
+tr.rx{cursor:pointer}tr.rx:hover td{background:#f3f8ff}
+tr.rdet td{background:#fafcff;text-align:left}
+.tl{border-collapse:collapse;width:100%;font-size:11.5px}.tl th{background:#e3eefb!important;color:#0a2e80!important;position:static!important;padding:4px 6px}.tl td{padding:3px 6px;border-bottom:1px solid #eef1f6}
 .bar-in{display:inline-block;height:9px;background:var(--azul2);border-radius:4px;vertical-align:middle;margin-right:6px}
 .modal{position:fixed;inset:0;background:rgba(0,20,60,.5);display:none;align-items:flex-start;justify-content:center;z-index:200;padding:30px 14px;overflow:auto}
 .modal.open{display:flex}
@@ -290,15 +300,12 @@ table.data td.l{text-align:left}
 <section class="view" id="v-detalle">
   <div class="card">
     <h2 id="det-titulo">Detalle por ítem</h2>
-    <p class="hint">Asigna <b>Dpto. responsable</b> y <b>Justificación</b> por ítem (aplica a todas sus olas). Los valores con <span class="sug">↺</span> vienen sugeridos del último registro histórico del ítem. Se guarda solo, en tiempo real.</p>
+    <p class="hint">Asigna <b>Dpto. responsable</b> y <b>Justificación</b> por ítem (aplica a todas sus olas). Cada jornada arranca <b>en blanco</b>: tú decides la causa de hoy, aunque el ítem se haya cancelado antes. La etiqueta <span class="rc">↻N</span> indica en cuántas jornadas anteriores se canceló (pasa el cursor para ver la última causa). Haz clic en el título de una columna para ordenar y usa los filtros debajo de cada título. Se guarda solo, en tiempo real.</p>
     <div class="toolbar">
-      <div class="f"><label class="fld">Piso</label><select id="f-piso" onchange="renderDetalle()"></select></div>
-      <div class="f"><label class="fld">Ola</label><select id="f-ola" onchange="renderDetalle()"></select></div>
-      <div class="f"><label class="fld">Dpto. responsable</label><select id="f-dpto" onchange="renderDetalle()"></select></div>
-      <div class="f"><label class="fld">Justificación</label><select id="f-just" onchange="renderDetalle()"></select></div>
       <div class="f"><label class="fld">Estado</label><select id="f-est" onchange="renderDetalle()">
-        <option value="">Todos</option><option value="pend">Pendientes (sin Dpto o Just.)</option><option value="ok">Gestionados</option><option value="sug">Con sugerencia ↺</option><option value="nota">Con nota</option><option value="sinnota">Sin nota</option></select></div>
+        <option value="">Todos</option><option value="pend">Pendientes (sin Dpto o Just.)</option><option value="ok">Gestionados</option><option value="reinc">Reincidentes ↻</option><option value="nota">Con nota</option><option value="sinnota">Sin nota</option></select></div>
       <div class="f" style="flex:1;min-width:200px"><label class="fld">Buscar</label><input type="text" id="f-q" placeholder="Descripción, ítem o nota…" oninput="renderDetalle()"></div>
+      <div class="f"><label class="fld">&nbsp;</label><button class="btn ghost sm" onclick="limpiarFiltrosDet()">✕ Limpiar filtros</button></div>
     </div>
     <div class="kpis" id="kpis-det"></div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:center">
@@ -306,13 +313,12 @@ table.data td.l{text-align:left}
       <select id="m-dpto" class="sel-in" style="width:auto"></select>
       <select id="m-just" class="sel-in" style="width:auto"></select>
       <button class="btn sec sm" onclick="asignarMasivo()">Aplicar</button>
-      <button class="btn teal sm" onclick="rellenarSugerencias()">↺ Rellenar vacíos desde histórico</button>
-      <button class="btn ghost sm" onclick="aceptarSugerencias()">✓ Aceptar sugerencias ↺ visibles</button>
+      <button class="btn ghost sm" id="btn-limpsug" hidden onclick="limpiarPrellenados()"></button>
       <button class="btn sec sm" onclick="nuevaOpcionUI('dptos')">＋ Agregar responsable</button>
       <button class="btn sec sm" onclick="nuevaOpcionUI('justs')">＋ Agregar justificación</button>
       <button class="btn sec sm" style="margin-left:auto" onclick="exportExcelJornada()">⬇ Exportar Excel</button>
     </div>
-    <div class="tbl-wrap" style="max-height:64vh"><table class="data" id="tbl-det"></table></div>
+    <div class="tbl-wrap" style="max-height:64vh"><table class="data" id="tbl-det"><thead><tr><th><div class="thc" onclick="ordenDet('id')">Ítem <span class="so" data-k="id"></span></div><input type="text" class="fh" id="fc-item" placeholder="Filtrar…" oninput="renderDetalle()"></th><th style="text-align:left"><div class="thc" onclick="ordenDet('desc')">Descripción <span class="so" data-k="desc"></span></div><input type="text" class="fh" id="fc-desc" placeholder="Filtrar…" oninput="renderDetalle()"></th><th><div class="thc" onclick="ordenDet('wave')">Ola <span class="so" data-k="wave"></span></div><select class="fh" id="f-ola" onchange="renderDetalle()"></select></th><th><div class="thc" onclick="ordenDet('qty')">Unidades <span class="so" data-k="qty"></span></div><input type="number" min="0" class="fh" id="fc-qty" placeholder="≥ mín." oninput="renderDetalle()"></th><th><div class="thc" onclick="ordenDet('clase')">Clase ajuste <span class="so" data-k="clase"></span></div><select class="fh" id="fc-clase" onchange="renderDetalle()"></select></th><th><div class="thc" onclick="ordenDet('piso')">Piso <span class="so" data-k="piso"></span></div><select class="fh" id="f-piso" onchange="renderDetalle()"></select></th><th><div class="thc" onclick="ordenDet('ubic')">Ubic. despacho <span class="so" data-k="ubic"></span></div><input type="text" class="fh" id="fc-ubic" placeholder="Filtrar…" oninput="renderDetalle()"></th><th><div class="thc" onclick="ordenDet('dpto')">Dpto. responsable <span class="so" data-k="dpto"></span></div><select class="fh" id="f-dpto" onchange="renderDetalle()"></select></th><th><div class="thc" onclick="ordenDet('just')">Justificación <span class="so" data-k="just"></span></div><select class="fh" id="f-just" onchange="renderDetalle()"></select></th><th style="text-align:left;min-width:220px"><div class="thc" onclick="ordenDet('nota')">Nota / reseña <span class="so" data-k="nota"></span></div><input type="text" class="fh" id="fc-nota" placeholder="Filtrar…" oninput="renderDetalle()"></th></tr></thead><tbody id="tb-det"></tbody></table></div>
     <div class="hint" id="rec-count" style="margin-top:8px"></div>
   </div>
 </section>
@@ -369,8 +375,18 @@ table.data td.l{text-align:left}
     <div><h3>% de ítems gestionados por período</h3><div class="chartbox t"><canvas id="g-gest"></canvas></div></div>
   </div></div>
   <div class="card">
-    <h3 class="h3x">Ítems reincidentes · Top 50 <button class="btn png" onclick="exportTablaImagen('g-items','ÍTEMS REINCIDENTES — TOP 50','items_reincidentes',$('g-sub').textContent)">⬇ PNG</button></h3>
-    <p class="hint">Ítems que se cancelan en muchas jornadas = problema estructural (ubicación, configuración, inventario). Ordenado por unidades.</p>
+    <h3 class="h3x">Ítems reincidentes <button class="btn png" onclick="exportTablaImagen('g-items','ÍTEMS REINCIDENTES','items_reincidentes',$('g-sub').textContent+' · '+$('r-info').textContent)">⬇ PNG</button></h3>
+    <p class="hint">Ítems que se cancelan en muchas jornadas = problema estructural (ubicación, configuración, inventario). La columna <b>Causas</b> muestra en cuántas jornadas se dio cada justificación, para ver si se repite el mismo motivo o cambia. <b>Haz clic en una fila</b> para ver su historial jornada por jornada.</p>
+    <div class="toolbar">
+      <div class="f"><label class="fld">Ordenar por</label><select id="r-orden" onchange="renderReinc()"><option value="dias">Jornadas en que se canceló</option><option value="v">Unidades canceladas</option><option value="prom">Unidades por jornada</option><option value="sj">Jornadas sin justificar</option><option value="ult">Cancelado más reciente</option></select></div>
+      <div class="f"><label class="fld">Mín. jornadas</label><input type="number" id="r-min" min="1" value="2" style="width:80px" oninput="renderReinc()"></div>
+      <div class="f"><label class="fld">Piso</label><select id="r-piso" onchange="renderReinc()"></select></div>
+      <div class="f"><label class="fld">Dpto. responsable</label><select id="r-dpto" onchange="renderReinc()"></select></div>
+      <div class="f"><label class="fld">Justificación</label><select id="r-just" onchange="renderReinc()"></select></div>
+      <div class="f"><label class="fld">Mostrar</label><select id="r-top" onchange="renderReinc()"><option>25</option><option selected>50</option><option>100</option><option value="0">Todos</option></select></div>
+      <div class="f" style="flex:1;min-width:180px"><label class="fld">Buscar</label><input type="text" id="r-q" placeholder="Ítem o descripción…" oninput="renderReinc()"></div>
+    </div>
+    <div class="hint" id="r-info" style="margin:-4px 0 8px"></div>
     <div class="tbl-wrap" style="max-height:520px"><table class="data" id="g-items"></table></div>
   </div>
 </section>
@@ -555,9 +571,9 @@ function generar(){
       zona:inf?inf.zona:'', ubic:inf?inf.ubic:'', piso:inf?getPiso(inf.zona):'?', dpto:'', just:'', sug:false};
   });
   var lista=Object.keys(items).map(function(k){return items[k];});
-  // Prellenar con sugerencias del histórico
-  var sug=mapaSugerencias(null), nSug=0;
-  lista.forEach(function(i){ var s=sug[i.id]; if(s){ i.dpto=s.dpto||''; i.just=s.just||''; i.sug=true; nSug++; } });
+  // Cada jornada arranca en blanco: la causa de hoy la decide el equipo (no se copia la de jornadas anteriores)
+  var fJ=$('fecha-jornada').value||hoyISO(), HH=histItems(fJ), nSug=0;
+  lista.forEach(function(i){ if(HH[i.id]) nSug++; });
   var f=$('fecha-jornada').value||hoyISO(); $('fecha-jornada').value=f;
   var prev=JORNADAS[f], nNuevos=lista.length, nAct=0, nConserva=0;
   if(prev && estadoJ(prev)==='cerrada' && !confirm('La jornada '+fl(f)+' está CERRADA. ¿Reabrirla y actualizarla con este reporte?')) return;
@@ -586,7 +602,7 @@ function generar(){
     '<div>R031 · encabezado en fila <b>'+b.hdrRow+'</b><br>Columnas: <b>'+esc(b.cols.item)+'</b>, <b>'+esc(b.cols.zona)+'</b>, <b>'+esc(b.cols.ubic)+'</b></div>'+
     '<div>R031 · ítems en catálogo<br><b style="font-size:18px">'+nf(Object.keys(b.map).length)+'</b></div>'+
     '<div>Ítems sin zona en R031 (piso ?)<br><b style="font-size:18px;color:'+(nSinZ?'#C8102E':'#00A499')+'">'+nf(nSinZ)+'</b> · '+nf(uSinZ)+' u.</div>'+
-    '<div>Prellenados desde histórico ↺<br><b style="font-size:18px">'+nf(nSug)+'</b> registros</div>';
+    '<div>Ítems reincidentes ↻ (cancelados en jornadas anteriores, quedan en blanco)<br><b style="font-size:18px">'+nf(nSug)+'</b> registros</div>';
   $('diag-warn').innerHTML = (unidFin!==unidR121? '<div class="msg err">Las unidades consolidadas no cuadran con el R121. Revisa el archivo.</div>':'') +
     (nSinZ? '<div class="msg warn">⚠ '+nSinZ+' ítem(s) del R121 no aparecen en el R031 → quedan con piso "?". Verifica que el R031 sea el inventario completo.</div>':'<div class="msg ok">✓ Todos los ítems cruzaron con su zona de picking.</div>');
   checkFecha();
@@ -769,40 +785,76 @@ function poblarFiltros(){
   fill('f-ola',uniq(it.map(function(i){return i.wave;})).sort(ordenar),'Todas');
   fill('f-dpto',CONFIG.dptos,'Todos'); $('f-dpto').insertAdjacentHTML('beforeend','<option value="__none">('+SIN_D+')</option>');
   fill('f-just',CONFIG.justs,'Todas'); $('f-just').insertAdjacentHTML('beforeend','<option value="__none">('+SIN_J+')</option>');
+  fill('fc-clase',uniq(it.map(function(i){return i.clase||'';}).filter(Boolean)).sort(ordenar),'Todas');
   $('m-dpto').innerHTML=opts(CONFIG.dptos,'','Dpto. responsable…'); $('m-just').innerHTML=opts(CONFIG.justs,'','Justificación…');
 }
+var DET_SORT={k:'qty',d:-1};
+function ordenDet(k){ if(DET_SORT.k===k) DET_SORT.d=-DET_SORT.d; else DET_SORT={k:k,d:(k==='qty'?-1:1)}; renderDetalle(); }
+function limpiarFiltrosDet(){ ['fc-item','fc-desc','fc-qty','fc-ubic','fc-nota','f-q'].forEach(function(i){$(i).value='';});
+  ['f-ola','fc-clase','f-piso','f-dpto','f-just','f-est'].forEach(function(i){$(i).value='';}); DET_SORT={k:'qty',d:-1}; renderDetalle(); }
+/* Historial de un ítem en OTRAS jornadas (solo referencia, nunca se copia) */
+function histItems(excluir){ var H={};
+  Object.keys(JORNADAS).sort().forEach(function(f){ if(f===excluir) return; var vis={};
+    (JORNADAS[f].items||[]).forEach(function(i){ if(vis[i.id]){ if(!H[i.id].ult.just&&i.just){H[i.id].ult.just=i.just;H[i.id].ult.dpto=i.dpto;} return; } vis[i.id]=1;
+      var h=H[i.id]||(H[i.id]={n:0,ult:null}); h.n++; h.ult={f:f,dpto:i.dpto||'',just:i.just||''}; }); });
+  return H; }
+var HIST_DET={};
+function valDet(i,k){ if(k==='ubic') return i.ubic||i.zona||''; var v=i[k]; return v==null?'':v; }
 function filtrados(){
   var it=itemsAct(), fp=$('f-piso').value, fo=$('f-ola').value, fd=$('f-dpto').value, fj=$('f-just').value, fe=$('f-est').value, q=$('f-q').value.trim().toLowerCase();
-  return it.filter(function(i){
+  var ci=$('fc-item').value.trim().toLowerCase(), cd=$('fc-desc').value.trim().toLowerCase(), cq=parseFloat($('fc-qty').value), cc=$('fc-clase').value,
+      cu=$('fc-ubic').value.trim().toLowerCase(), cn=$('fc-nota').value.trim().toLowerCase();
+  var r=it.filter(function(i){
     if(fp&&i.piso!==fp) return false; if(fo&&i.wave!==fo) return false;
     if(fd==='__none'&&i.dpto) return false; if(fd&&fd!=='__none'&&i.dpto!==fd) return false;
     if(fj==='__none'&&i.just) return false; if(fj&&fj!=='__none'&&i.just!==fj) return false;
-    if(fe==='pend'&&gest(i)) return false; if(fe==='ok'&&!gest(i)) return false; if(fe==='sug'&&!i.sug) return false;
+    if(fe==='pend'&&gest(i)) return false; if(fe==='ok'&&!gest(i)) return false; if(fe==='reinc'&&!HIST_DET[i.id]) return false;
     if(fe==='nota'&&!i.nota) return false; if(fe==='sinnota'&&i.nota) return false;
+    if(ci&&String(i.id).toLowerCase().indexOf(ci)<0) return false;
+    if(cd&&(i.desc||'').toLowerCase().indexOf(cd)<0) return false;
+    if(!isNaN(cq)&&i.qty<cq) return false;
+    if(cc&&(i.clase||'')!==cc) return false;
+    if(cu&&valDet(i,'ubic').toLowerCase().indexOf(cu)<0) return false;
+    if(cn&&(i.nota||'').toLowerCase().indexOf(cn)<0) return false;
     if(q&&(i.desc||'').toLowerCase().indexOf(q)<0&&i.id.indexOf(q)<0&&(i.nota||'').toLowerCase().indexOf(q)<0) return false;
     return true;
   });
+  var k=DET_SORT.k, d=DET_SORT.d;
+  r.sort(function(a,b){ var c;
+    if(k==='qty') c=(a.qty-b.qty); else if(k==='wave'||k==='piso'||k==='id') c=ordenar(String(valDet(a,k)),String(valDet(b,k)));
+    else { var x=String(valDet(a,k)), y=String(valDet(b,k)); if(!x&&y) return 1; if(x&&!y) return -1; c=x.localeCompare(y,'es'); }
+    c=c*d; if(!c) c=(b.qty-a.qty)||ordenar(String(a.id),String(b.id))||ordenar(String(a.wave),String(b.wave)); return c; });
+  return r;
 }
+function limpiarPrellenados(){
+  var it=itemsAct().filter(function(i){return i.sug;}); if(!it.length) return;
+  if(!confirm(it.length+' registro(s) de esta jornada tienen Dpto./Justificación copiados automáticamente de jornadas anteriores (↺) y nadie los confirmó. ¿Dejarlos en blanco para justificarlos con la causa de hoy?')) return;
+  var t=Date.now(); it.forEach(function(i){ i.dpto=''; i.just=''; i.sug=false; i.t=t; }); guardarActiva(); renderDetalle(); }
 function renderDetalle(){
   var it=itemsAct();
   $('det-titulo').textContent='Detalle por ítem · '+(activa?fl(activa):'');
-  if(!it.length){ $('tbl-det').innerHTML='<tbody><tr><td style="padding:20px;color:#889">Sin jornada.</td></tr></tbody>'; $('kpis-det').innerHTML=''; $('rec-count').textContent=''; return; }
+  document.querySelectorAll('#tbl-det .so').forEach(function(e){ e.textContent= e.getAttribute('data-k')===DET_SORT.k ? (DET_SORT.d<0?'▼':'▲') : '⇅'; e.style.opacity=e.getAttribute('data-k')===DET_SORT.k?1:.45; });
+  var nS=it.filter(function(i){return i.sug;}).length, bl=$('btn-limpsug'); bl.hidden=!nS; bl.textContent='✕ Limpiar '+nS+' prellenado(s) ↺ de jornadas anteriores';
+  if(!it.length){ $('tb-det').innerHTML='<tr><td colspan="10" style="padding:20px;color:#889">Sin jornada.</td></tr>'; $('kpis-det').innerHTML=''; $('rec-count').textContent=''; return; }
+  HIST_DET=histItems(activa);
   var f=filtrados(), tu=sum(it,function(i){return i.qty;}), g=it.filter(gest), pend=it.length-g.length;
+  var reIds=uniq(it.filter(function(i){return HIST_DET[i.id];}).map(function(i){return i.id;}));
   $('kpis-det').innerHTML= kpi(nf(it.length),'Registros','', nf(tu)+' unidades')+
     kpi(pct(g.length,it.length)+'%','Gestionados', g.length===it.length?'good':'', g.length+' de '+it.length)+
     kpi(nf(pend),'Pendientes', pend?'alert':'good', nf(sum(it.filter(function(i){return !gest(i);}),function(i){return i.qty;}))+' u. sin causa')+
-    kpi(nf(it.filter(function(i){return i.sug;}).length),'Sugeridos ↺','', 'por revisar');
-  var h='<thead><tr><th>Ítem</th><th style="text-align:left">Descripción</th><th>Ola</th><th>Unidades</th><th>Clase ajuste</th><th>Piso</th><th>Ubic. despacho</th><th>Dpto. responsable</th><th>Justificación</th><th style="text-align:left;min-width:220px">Nota / reseña</th></tr></thead><tbody>';
-  f.forEach(function(i){ var ix=it.indexOf(i);
-    h+='<tr><td style="font-family:monospace">'+esc(i.id)+'</td><td class="desc" title="'+esc(i.desc)+'">'+esc(i.desc)+'</td><td>'+esc(i.wave)+'</td><td><b>'+nf(i.qty)+'</b></td>'+
+    kpi(nf(reIds.length),'Ítems reincidentes ↻','', 'ya cancelados en otras jornadas');
+  var h='';
+  f.forEach(function(i){ var ix=it.indexOf(i), H=HIST_DET[i.id];
+    var rc=H? '<span class="rc" title="Cancelado en '+H.n+' jornada(s) anteriores. Última: '+esc(fl(H.ult.f))+' · '+esc(H.ult.dpto||SIN_D)+' · '+esc(H.ult.just||SIN_J)+'. (Solo referencia: hoy decides tú la causa)">↻'+H.n+'</span>' : '';
+    h+='<tr><td style="font-family:monospace;white-space:nowrap">'+esc(i.id)+rc+'</td><td class="desc" title="'+esc(i.desc)+'">'+esc(i.desc)+'</td><td>'+esc(i.wave)+'</td><td><b>'+nf(i.qty)+'</b></td>'+
       '<td><span class="pill n">'+esc(i.clase||'—')+'</span></td><td><span class="pill b">'+esc(i.piso)+'</span></td><td style="font-size:11.5px">'+esc(i.ubic||i.zona||'—')+'</td>'+
-      '<td><select class="sel-in'+(i.dpto?'':' vacio')+'" onchange="asignar('+ix+',\'dpto\',this.value)">'+opts(CONFIG.dptos.concat(i.dpto&&CONFIG.dptos.indexOf(i.dpto)<0?[i.dpto]:[]),i.dpto)+OPT_ADD+'</select>'+(i.sug?'<span class="sug" title="Sugerido del histórico">↺</span>':'')+'</td>'+
+      '<td><select class="sel-in'+(i.dpto?'':' vacio')+'" onchange="asignar('+ix+',\'dpto\',this.value)">'+opts(CONFIG.dptos.concat(i.dpto&&CONFIG.dptos.indexOf(i.dpto)<0?[i.dpto]:[]),i.dpto)+OPT_ADD+'</select>'+(i.sug?'<span class="sug" title="Copiado automáticamente de una jornada anterior (versión previa). Confírmalo o cámbialo.">↺</span>':'')+'</td>'+
       '<td><select class="sel-in'+(i.just?'':' vacio')+'" onchange="asignar('+ix+',\'just\',this.value)">'+opts(CONFIG.justs.concat(i.just&&CONFIG.justs.indexOf(i.just)<0?[i.just]:[]),i.just)+OPT_ADD+'</select></td>'+
       '<td><input type="text" class="nota-in" maxlength="300" placeholder="Escribe una nota…" value="'+esc(i.nota||'')+'" title="'+esc(i.nota||'')+'" oninput="setNota('+ix+',this.value)"></td></tr>';
   });
-  if(!f.length) h+='<tr><td colspan="10" style="padding:18px;color:#889">Sin resultados.</td></tr>';
-  $('tbl-det').innerHTML=h+'</tbody>';
-  $('rec-count').textContent='Mostrando '+f.length+' de '+it.length+' registros';
+  if(!f.length) h+='<tr><td colspan="10" style="padding:18px;color:#889">Sin resultados con estos filtros.</td></tr>';
+  $('tb-det').innerHTML=h;
+  $('rec-count').textContent='Mostrando '+f.length+' de '+it.length+' registros · '+nf(sum(f,function(i){return i.qty;}))+' de '+nf(tu)+' unidades';
 }
 var OPT_ADD='<option value="__add__" style="color:#00A499;font-weight:700">＋ Agregar nuevo…</option>';
 function agregarOpcion(tipo){
@@ -826,7 +878,7 @@ function asignarMasivo(){
   var f=filtrados(); if(!confirm('Asignar a '+f.length+' registros filtrados?')) return;
   var t=Date.now(); f.forEach(function(i){ if(d) i.dpto=d; if(j) i.just=j; i.sug=false; i.t=t; }); guardarActiva(); renderDetalle();
 }
-function aceptarSugerencias(){ var t=Date.now(); var f=filtrados().filter(function(i){return i.sug;}); f.forEach(function(i){i.sug=false; i.t=t;}); guardarActiva(); renderDetalle(); }
+
 
 /* ═══════════════ ANÁLISIS JORNADA ═══════════════ */
 function agrupar(items, keyFn){ var m={}; items.forEach(function(i){ var k=keyFn(i); m[k]=(m[k]||0)+i.qty; });
@@ -979,17 +1031,56 @@ function renderGerencial(){
     options:{responsive:true,maintainAspectRatio:false,animation:false,plugins:{legend:{position:'bottom',labels:{usePointStyle:true,boxWidth:9}},tooltip:{backgroundColor:FTD.azul1}},
       scales:{x:{grid:{display:false}},y:{min:0,max:105,grid:{color:FTD.rejilla},ticks:{callback:function(v){return v+'%';}}}}}});
   // Ítems reincidentes
-  var I={}; rec.forEach(function(r){ var i=r.i; if(!I[i.id]) I[i.id]={id:i.id,desc:i.desc,piso:i.piso,v:0,dias:{},d:{},j:{},nota:''};
-    if(i.nota) I[i.id].nota=i.nota;
-    var o=I[i.id]; o.v+=i.qty; o.dias[r.f]=1; if(i.dpto) o.d[i.dpto]=(o.d[i.dpto]||0)+i.qty; if(i.just) o.j[i.just]=(o.j[i.just]||0)+i.qty; });
-  function topK(o){ var k=Object.keys(o).sort(function(a,b){return o[b]-o[a];}); return k[0]||''; }
-  var arrI=Object.keys(I).map(function(k){return I[k];}).sort(function(a,b){return b.v-a.v;}).slice(0,50), mx=arrI.length?arrI[0].v:1;
-  $('g-items').innerHTML='<thead><tr><th>#</th><th>Ítem</th><th style="text-align:left">Descripción</th><th>Piso</th><th>Jornadas</th><th>Unidades</th><th>%</th><th style="text-align:left">Dpto. principal</th><th style="text-align:left">Causa principal</th><th style="text-align:left">Última nota</th></tr></thead><tbody>'+
-    arrI.map(function(t,n){ var nd=Object.keys(t.dias).length;
-      return '<tr><td><b>'+(n+1)+'</b></td><td style="font-family:monospace">'+t.id+'</td><td class="desc" title="'+esc(t.desc)+'">'+esc(t.desc)+'</td><td><span class="pill b">'+esc(t.piso)+'</span></td>'+
-      '<td><span class="pill '+(nd>=5?'r':nd>=3?'n':'g')+'">'+nd+'</span></td><td><span class="bar-in" style="width:'+Math.round(t.v/mx*70)+'px"></span><b>'+nf(t.v)+'</b></td><td>'+pct(t.v,tu)+'%</td>'+
-      '<td class="l" style="font-size:11.5px">'+esc(topK(t.d)||'—')+'</td><td class="l" style="font-size:11.5px">'+esc(topK(t.j)||'—')+'</td><td class="l" style="font-size:11.5px;white-space:normal;min-width:180px">'+esc(t.nota||'')+'</td></tr>'; }).join('')+'</tbody>';
+  REINC={tu:tu,items:construirReinc(rec)}; renderReinc();
 }
+var REINC={tu:0,items:[]}, REINC_OPEN={};
+function construirReinc(rec){
+  var I={};
+  rec.forEach(function(r){ var i=r.i; var o=I[i.id]||(I[i.id]={id:i.id,desc:i.desc,piso:i.piso,v:0,dias:{}});
+    o.v+=i.qty; if(i.piso&&i.piso!=='?') o.piso=i.piso;
+    var d=o.dias[r.f]||(o.dias[r.f]={q:0,olas:{},dpto:'',just:'',nota:''}); d.q+=i.qty; d.olas[i.wave]=1;
+    if(i.dpto&&!d.dpto) d.dpto=i.dpto; if(i.just&&!d.just) d.just=i.just; if(i.nota&&!d.nota) d.nota=i.nota; });
+  return Object.keys(I).map(function(k){ var o=I[k], fs=Object.keys(o.dias).sort(), J={}, D={}, sj=0, nota='';
+    fs.forEach(function(f){ var d=o.dias[f], kj=d.just||SIN_J, kd=d.dpto||SIN_D;
+      J[kj]=J[kj]||{n:0,u:0}; J[kj].n++; J[kj].u+=d.q; D[kd]=D[kd]||{n:0,u:0}; D[kd].n++; D[kd].u+=d.q;
+      if(!d.just||!d.dpto) sj++; if(d.nota) nota=d.nota; });
+    o.fechas=fs; o.n=fs.length; o.prom=o.v/o.n; o.ult=fs[fs.length-1]; o.J=J; o.D=D; o.sj=sj; o.nota=nota; return o; });
+}
+function desglose(M,sin){ return Object.keys(M).sort(function(a,b){return (M[b].n-M[a].n)||(M[b].u-M[a].u);}).map(function(k){
+  return '<span class="cz'+(k===sin?' sj':'')+'" title="'+M[k].n+' jornada(s) · '+nf(M[k].u)+' u.">'+esc(k)+' ×'+M[k].n+'</span>'; }).join(''); }
+function renderReinc(){
+  var A=REINC.items, tu=REINC.tu||1;
+  function fill(id,vals,pre){ var s=$(id), c=s.value; s.innerHTML='<option value="">'+pre+'</option>'+vals.map(function(v){return '<option value="'+esc(v)+'">'+esc(v)+'</option>';}).join(''); if(vals.indexOf(c)>=0) s.value=c; }
+  fill('r-piso',uniq(A.map(function(o){return o.piso;})).sort(ordenar),'Todos');
+  fill('r-dpto',uniq([].concat.apply([],A.map(function(o){return Object.keys(o.D);}))).sort(),'Todos');
+  fill('r-just',uniq([].concat.apply([],A.map(function(o){return Object.keys(o.J);}))).sort(),'Todas');
+  var mn=parseInt($('r-min').value)||1, fp=$('r-piso').value, fd=$('r-dpto').value, fj=$('r-just').value, q=$('r-q').value.trim().toLowerCase(), ord=$('r-orden').value, top=parseInt($('r-top').value);
+  var L=A.filter(function(o){ return o.n>=mn && (!fp||o.piso===fp) && (!fd||o.D[fd]) && (!fj||o.J[fj]) &&
+    (!q||String(o.id).toLowerCase().indexOf(q)>=0||(o.desc||'').toLowerCase().indexOf(q)>=0); });
+  var key={dias:function(o){return o.n;},v:function(o){return o.v;},prom:function(o){return o.prom;},sj:function(o){return o.sj;},ult:function(o){return o.ult;}}[ord];
+  L.sort(function(a,b){ var x=key(a), y=key(b); var c= typeof x==='string'? y.localeCompare(x) : y-x; return c||(b.n-a.n)||(b.v-a.v); });
+  var nTot=L.length, uTot=sum(L,function(o){return o.v;}); if(top) L=L.slice(0,top);
+  $('r-info').textContent=nf(nTot)+' ítem(s) cumplen el filtro · '+nf(uTot)+' u. ('+pct(uTot,tu)+'% del período)'+(top&&nTot>top?' · mostrando '+top:'');
+  var mx=Math.max.apply(null,L.map(function(o){return o.v;}).concat([1])), mxn=Math.max.apply(null,L.map(function(o){return o.n;}).concat([1]));
+  var h='<thead><tr><th>#</th><th>Ítem</th><th style="text-align:left">Descripción</th><th>Piso</th><th>Jornadas</th><th>Unidades</th><th>%</th><th>u./jornada</th><th>Última vez</th><th>Sin justificar</th><th style="text-align:left;min-width:200px">Causas (jornadas)</th><th style="text-align:left;min-width:160px">Dpto. (jornadas)</th><th style="text-align:left">Última nota</th></tr></thead><tbody>';
+  L.forEach(function(t,n){
+    h+='<tr class="rx" onclick="toggleReinc(\''+esc(t.id)+'\')"><td><b>'+(n+1)+'</b></td><td style="font-family:monospace">'+(REINC_OPEN[t.id]?'▾ ':'▸ ')+esc(t.id)+'</td><td class="desc" title="'+esc(t.desc)+'">'+esc(t.desc)+'</td><td><span class="pill b">'+esc(t.piso)+'</span></td>'+
+      '<td><span class="bar-in" style="background:#C8102E;width:'+Math.round(t.n/mxn*40)+'px"></span><span class="pill '+(t.n>=10?'r':t.n>=4?'n':'g')+'">'+t.n+'</span></td>'+
+      '<td><span class="bar-in" style="width:'+Math.round(t.v/mx*60)+'px"></span><b>'+nf(t.v)+'</b></td><td>'+pct(t.v,tu)+'%</td><td>'+nf(Math.round(t.prom))+'</td>'+
+      '<td style="white-space:nowrap">'+fl(t.ult)+'</td><td>'+(t.sj?'<span class="pill r">'+t.sj+'</span>':'<span class="pill g">0</span>')+'</td>'+
+      '<td class="l" style="white-space:normal">'+desglose(t.J,SIN_J)+'</td><td class="l" style="white-space:normal">'+desglose(t.D,SIN_D)+'</td>'+
+      '<td class="l" style="font-size:11.5px;white-space:normal;min-width:160px">'+esc(t.nota||'')+'</td></tr>';
+    if(REINC_OPEN[t.id]){
+      h+='<tr class="rdet"><td></td><td colspan="12"><table class="tl"><tr><th>Jornada</th><th>Unidades</th><th>Olas</th><th style="text-align:left">Dpto. responsable</th><th style="text-align:left">Justificación</th><th style="text-align:left">Nota</th></tr>'+
+        t.fechas.slice().reverse().map(function(f){ var d=t.dias[f];
+          return '<tr><td>'+fl(f)+'</td><td><b>'+nf(d.q)+'</b></td><td>'+Object.keys(d.olas).sort(ordenar).map(esc).join(', ')+'</td><td>'+esc(d.dpto||SIN_D)+'</td><td>'+(d.just?esc(d.just):'<span style="color:#9a0d22">'+SIN_J+'</span>')+'</td><td>'+esc(d.nota||'')+'</td></tr>'; }).join('')+
+        '</table></td></tr>';
+    }
+  });
+  if(!L.length) h+='<tr><td colspan="13" style="padding:18px;color:#889">Ningún ítem cumple los filtros.</td></tr>';
+  $('g-items').innerHTML=h+'</tbody>';
+}
+function toggleReinc(id){ REINC_OPEN[id]=!REINC_OPEN[id]; renderReinc(); }
 
 /* ═══════════════ HISTORIAL ═══════════════ */
 function renderHistorial(){
